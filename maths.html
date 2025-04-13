@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #FF6B6B, #FFE66D);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            background:linear-gradient(red,orange,lightgreen);
+            padding: 30px;
+            margin: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        .timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            border: 2px solid #dee2e6;
+        }
+        .timer.warning {
+            background: #fff3cd;
+            color: #856404;
+            border-color: #ffeeba;
+        }
+        .timer.danger {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+        .question {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #333;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .options {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 0 20px;
+            
+        }
+        .option {
+            background:yellow;
+            border: 2px solid #dee2e6;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.2em;
+        }
+        .option:hover {
+            background: #e9ecef;
+            border-color: #4CAF50;
+            transform: translateY(-2px);
+        }
+        .progress {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #666;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #4CAF50;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="timer" class="timer">10:00</div>
+        <h1>Math Quiz</h1>
+        <div id="quiz"></div>
+        <div class="progress" id="progress"></div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+    </div>
+    
+    <script>
+        const operations = ['+', '-', '*', '/'];
+        let currentQuestion = 0;
+        let score = 0;
+        let userResponses = [];
+        let timeLeft = 600; // 10 minutes in seconds
+        let timerInterval;
+        const totalQuestions = 20;
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const timerDisplay = document.getElementById('timer');
+            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            // Add warning colors
+            if (timeLeft <= 60) { // Last minute
+                timerDisplay.className = 'timer danger';
+            } else if (timeLeft <= 180) { // Last 3 minutes
+                timerDisplay.className = 'timer warning';
+            }
+
+            if (timeLeft <= 0) {
+                submitQuiz();
+            }
+            timeLeft--;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                updateTimer();
+            }, 1000);
+        }
+
+        function submitQuiz() {
+            clearInterval(timerInterval);
+            localStorage.setItem('mathQuizScore', score);
+            localStorage.setItem('mathUserResponses', JSON.stringify(userResponses));
+            window.location.href = 'mathresults.html';
+        }
+
+        function generateQuestion() {
+            let num1 = Math.floor(Math.random() * 50) + 1;
+            let num2 = Math.floor(Math.random() * 50) + 1;
+            let operation = operations[Math.floor(Math.random() * operations.length)];
+            
+            if (operation === '/' && num2 === 0) num2 = 1;
+            let questionText = `${num1} ${operation} ${num2} = ?`;
+            let correctAnswer;
+            
+            switch (operation) {
+                case '+': correctAnswer = num1 + num2; break;
+                case '-': correctAnswer = num1 - num2; break;
+                case '*': correctAnswer = num1 * num2; break;
+                case '/': correctAnswer = Number((num1 / num2).toFixed(2)); break;
+            }
+            
+            let options = [
+                correctAnswer,
+                Number((correctAnswer + 2).toFixed(2)),
+                Number((correctAnswer - 2).toFixed(2)),
+                Number((correctAnswer + 5).toFixed(2))
+            ];
+            options = options.sort(() => Math.random() - 0.5);
+
+            return { questionText, options, correctAnswer };
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= totalQuestions) {
+                submitQuiz();
+                return;
+            }
+
+            const questionObj = generateQuestion();
+            const quizContainer = document.getElementById('quiz');
+            
+            quizContainer.innerHTML = `
+                <div class="question">${currentQuestion + 1}. ${questionObj.questionText}</div>
+                <div class="options">
+                    ${questionObj.options.map(option => 
+                        `<button class="option" onclick="checkAnswer(${option}, ${questionObj.correctAnswer})">${option}</button>`
+                    ).join('')}
+                </div>
+            `;
+
+            document.getElementById('progress').textContent = 
+                `Question ${currentQuestion + 1} of ${totalQuestions} | Score: ${score}`;
+            
+            document.getElementById('progressFill').style.width = 
+                `${((currentQuestion + 1) / totalQuestions) * 100}%`;
+        }
+
+        function checkAnswer(selected, correct) {
+            const isCorrect = selected === correct;
+            if (isCorrect) score++;
+
+            userResponses.push({
+                question: document.querySelector('.question').textContent.substring(3),
+                selected: selected,
+                correct: correct,
+                isCorrect: isCorrect
+            });
+
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        
+        window.onload = function() {
+            loadQuestion();
+            startTimer();
+        }
+    </script>
+</body>
+</html>

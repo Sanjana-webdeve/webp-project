@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Results</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #f8b500, #fceabb);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 30px;
+            margin: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+        .score-box {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            font-size: 1.5em;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        .answer-item {
+            text-align: left;
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f8f9fa;
+            border-left: 5px solid;
+        }
+        .correct {
+            border-left-color: #2ecc71;
+        }
+        .incorrect {
+            border-left-color: #e74c3c;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .stat-item {
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.2em;
+        }
+        .stat-item.correct {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        .stat-item.incorrect {
+            background: #ffebee;
+            color: #c62828;
+        }
+        .retry-btn {
+            background: #007bff;
+            color: white;
+            padding: 12px 24px;
+            font-size: 1.2em;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .retry-btn:hover {
+            background: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Quiz Results</h1>
+        <div class="score-box" id="score"></div>
+        
+        <div class="stats">
+            <div class="stat-item correct" id="correct-count"></div>
+            <div class="stat-item incorrect" id="wrong-count"></div>
+        </div>
+        
+        <div id="summary"></div>
+        
+       <button onclick="goBack()">Close Review</button>
+    </div>
+
+    <script>
+        function retryQuiz() {
+            localStorage.clear();
+            window.location.href = 'index.html';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const responses = JSON.parse(localStorage.getItem('userResponses') || '[]');
+            const score = parseInt(localStorage.getItem('quizScore') || '0');
+            
+            
+            const totalQuestions = responses.length;
+            const correctAnswers = responses.filter(r => r.isCorrect).length;
+            const wrongAnswers = totalQuestions - correctAnswers;
+            
+           
+            document.getElementById('score').textContent = 
+                `Final Score: ${score} out of ${totalQuestions}`;
+            document.getElementById('correct-count').textContent = 
+                `✅ Correct: ${correctAnswers}`;
+            document.getElementById('wrong-count').textContent = 
+                `❌ Wrong: ${wrongAnswers}`;
+            
+            // Generate summary
+            const summaryContainer = document.getElementById('summary');
+            responses.forEach((response, index) => {
+                const div = document.createElement('div');
+                div.className = `answer-item ${response.isCorrect ? 'correct' : 'incorrect'}`;
+                div.innerHTML = `
+                    <strong>Question ${index + 1}:</strong> ${response.question}<br>
+                    <strong>Your Answer:</strong> ${response.selected}<br>
+                    <strong>Correct Answer:</strong> ${response.correct}<br>
+                    <strong>Result:</strong> ${response.isCorrect ? '✅ Correct' : '❌ Incorrect'}
+                `;
+                summaryContainer.appendChild(div);
+            });
+        });
+    </script>
+    <script>
+        function goBack() {
+            window.history.go(-3);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maths Test Instructions</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            background: white;
+            padding: 30px;
+            margin: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #333;
+        }
+        .instructions {
+            text-align: left;
+            margin: 20px 0;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .start-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .start-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>World Geography Test Instructions</h1>
+        <div class="instructions">
+            <ul>
+                <li>The test consists of 10 multiple-choice questions.</li>
+                <li>You have a total of 10 minutes to complete the test.</li>
+                <li>Each correct answer awards you 1 point.</li>
+                <li>No negative marking for incorrect answers.</li>
+                <li>Ensure you have a stable internet connection before starting.</li>
+                <li>Click the "Start Test" button when you are ready.</li>
+            </ul>
+        </div>
+        <button class="start-btn" onclick="startTest()">Start Test</button>
+    </div>
+    
+    <script>
+        function startTest() {
+            window.location.href = "geography.html";
+        }
+    </script>
+</body>
+</html>

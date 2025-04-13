@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 75vh;
+            flex-direction: column;
+           
+        }
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color:#f4f4f4;
+        }
+        .login-box {
+            display: flex;
+            gap: 20px;
+        }
+        .box {
+            background-color: pink;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 1.8em;
+            text-align: center;
+            width: 300px;
+        }
+        .box img {
+            width: 100px;
+            height: 100px;
+            margin-bottom: 10px;
+        }
+        .box:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body style="background-image:url('mainbackground.png');background-position:center;background-repeat:no-repeat;background-size:cover;height:100 vh">
+    <div class="container">
+        <h1 >QuizMaster</h1>
+        <div class="login-box">
+            <div class="box" onclick="location.href='webp1.html'">
+                <img src="student.png" alt="Student Icon">
+                <div>Student Login</div>
+            </div>
+            <div class="box" onclick="location.href='webp2.html'">
+                <img src="teacher.png" alt="Admin Icon">
+                <div>Admin Login</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
