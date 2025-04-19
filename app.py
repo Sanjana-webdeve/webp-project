@@ -41,6 +41,7 @@ class Chapter(db.Model):
     __tablename__ = 'chapter'
     chap_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     chap_name = db.Column(db.String(20), unique=True, nullable=False)
+    standard = db.Column(db.Integer, nullable=False)
     desc = db.Column(db.String(50))
     sub_id = db.Column(db.Integer, db.ForeignKey("subject.sub_id", ondelete="CASCADE"), nullable=False)
     quizzes = db.relationship("Quiz", backref='chapter', lazy=True, cascade="all, delete")
@@ -233,6 +234,7 @@ def login():
             user= User.query.filter_by(email=e).first()
             if user and check_password_hash(user.password,p):
                 session['u_id'] = user.u_id
+                session['std'] = user.std
                 flash("Login successful","success")
 
                 if user.admin:
@@ -398,8 +400,9 @@ def delete_quiz(quiz_id):
 def add_chapter(sub_id):
     if request.method=="POST":
         chapn=request.form.get("chap_name")
+        std=request.form.get("std")
         desc=request.form.get("desc")
-        if not chapn or not desc:
+        if not chapn or not desc or not std:
             flash("All fields are required!","danger")
             return redirect(url_for("add_chapter",sub_id=sub_id))
         else:
@@ -408,7 +411,7 @@ def add_chapter(sub_id):
                 flash("Chapter already exists!","warning")
                 return redirect(url_for("admin_Dashboard"))
             else:
-                new_chap=Chapter(chap_name=chapn,desc=desc,sub_id=sub_id)
+                new_chap=Chapter(chap_name=chapn, standard=std,desc=desc,sub_id=sub_id)
                 try:
                     db.session.add(new_chap)
                     db.session.commit()
@@ -462,9 +465,11 @@ def edit_chapter(chap_id):
     chapter = Chapter.query.get(chap_id)
     if request.method == "POST":
         newn = request.form.get("chap_name")
+        std = request.form.get("std")
         desc = request.form.get("desc")
         
         chapter.chap_name = newn
+        chapter.standard = std
         chapter.desc = desc
         try:
             db.session.commit()
@@ -607,10 +612,12 @@ def user_Dashboard():
     takenquizid=[quiz.quiz_id for quiz in takenquiz ]
     not_taken=Quiz.query.filter(~Quiz.quiz_id.in_(takenquizid)).all()
     quizzes=not_taken+retake
+    f_quizzes=[]
     for quiz in quizzes:
-        if len(quiz.questions)==0:
-            quizzes.remove(quiz)
-    return render_template('userDashboard.html',quizzes=quizzes,td=td)
+        chap=Chapter.query.get(quiz.chap_id)
+        if len(quiz.questions)>0 and int(chap.standard)==int(session.get('std')):
+            f_quizzes.append(quiz)
+    return render_template('userDashboard.html',quizzes=f_quizzes,td=td)
 
 @app.route('/viewQuiz/<int:quiz_id>')
 def view_quiz(quiz_id):

@@ -42,13 +42,22 @@
                         <form id="addChapterForm"  action="{{ url_for('add_chapter',sub_id=sub_id)}}" method="POST" >
                             <input type="hidden" name="sub_id" value="{{ sub_id }}" />
                             <div class="form-group">
-                                <label for="subName">
+                                <label for="chapName">
                                     Chapter
                                 </label>
                                 <input type="text" 
                                        class="form-control" 
                                        id="chapName" name="chap_name"
                                        placeholder="Chapter" required />
+                            </div>
+                            <div class="form-group">
+                                <label for="std">
+                                    Standard
+                                </label>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="std" name="std"
+                                       placeholder="Standard" required />
                             </div>
                             <div class="form-group">
                                 <label for="chapDesc">
