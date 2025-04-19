@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster - Learning Made Fun</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        nav {
+            background: white;
+            box-shadow: 0 2px 4px rgba(218, 17, 17, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 64px;
+        }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #6b46c1;
+        }
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a, .nav-links button {
+            color:purple;
+            text-decoration: none;
+            transition: background 0.3s;
+            background: skyblue;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            padding: 2px 15px;
+            border-radius: 5px;
+            font-weight:5000;
+        }
+
+        .nav-links a:hover, .nav-links button:hover {
+            color:purple;
+            background:pink;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            border: none;
+            font-weight: 500;
+        }
+        .btn:hover{
+            background:pink;
+        }
+
+        .btn-primary {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #15803d;
+        }
+
+        .trending-section {
+            background: #6b46c1;
+            padding: 1.5rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .trending-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .trending-scroll {
+            display: flex;
+            gap: 1rem;
+            transition: transform 0.5s linear;
+            padding: 0 1rem;
+            white-space: nowrap;
+        }
+
+        .quiz-card {
+            flex: 0 0 auto;
+            background: white;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            width: 200px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: box-shadow 0.3s;
+        }
+
+        .quiz-card:hover {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .slider-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 10;
+            font-size: 1.5rem;
+            transition: background-color 0.3s;
+        }
+        .button{
+            box-shadow: #16a34a;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            cursor: pointer;
+            border: none;
+            font-weight: 500;
+            background: #16a34a;
+            color: white;
+
+        }
+
+        .slider-arrow:hover {
+            background-color: #f3f4f6;
+        }
+
+        .slider-arrow.left {
+            left: 1rem;
+        }
+
+        .slider-arrow.right {
+            right: 1rem;
+        }
+        .main-content {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .content-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .content-card:hover{
+            background:papayawhip;
+        }
+
+        .content-card h2 {
+            margin-bottom: 1rem;
+        }
+
+        .content-card p {
+            color: #4b5563;
+            margin-bottom: 1rem;
+        }
+        body {
+            background: #7c3aed;
+        }
+        .section {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: lightgray;
+            border: 1px solid #ccc;
+        }
+        .scroll-button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 5px;
+        }
+        .about-us {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background:black;
+            box-shadow: 0 2px 4px white;
+            color:white;
+            border-radius: 0.5rem;
+            text-align: center;
+        }
+        .contact-us {
+            background: black;
+            color: white;
+            padding: 3rem;
+            text-align: center;
+        }
+        .contactleft{
+            text-align:left;
+        }
+        .contactcenter{
+            text-align:center;
+        }
+        .contactright{
+            text-align:right;
+        }
+        .img {
+    width: 150px;  
+    height: 150px;
+    
+    display: block;
+    margin: 0 auto;
+    
+}
+.profile-container {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.profile-name {
+  font-weight: 500;
+  margin-left: 0.5rem;
+}
+
+.quiz-card-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.quiz-card {
+  cursor: pointer;
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.quiz-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">QuizMaster</div>
+            <div class="nav-links">
+                <button onclick="scrollToAboutUs()">About Us</button>
+                <button onclick="scrollToContactUs()">Contact Us</button>
+                <a href="home.html" class="button" style="align-items: center;">Home</a>
+                <a href="school.html"><button>School</button></a>
+                <a href="Olympiads.html"><button>Olympiads</button></a>
+                
+                <a href="tutorials.html"><button>Study and tutorials</button></a>
+                <a href="events.html"><button>Discover events</button></a>
+            </div>
+            
+
+    <div id="btn" class="section">
+        
+    </div>
+    <div className="profile-container">
+        <img src={defaultAvatarForUser} alt="Avatar" className="profile-avatar" />
+        <p className="profile-name">{defaultNameForNonLogUser}</p>
+      </div>
+      
+      <div className="quiz-card-grid">
+        <Card onClick={handleCardClick} className="quiz-card">
+          <CardContent className="flex flex-col items-center p-4">
+            <Button onClick={handleCardClick} className="mt-4">Next</Button>
+          </CardContent>
+        </Card>
+      </div>
+      
+
+    <script>
+        function scrollToSection() {
+            document.getElementById('target-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+                
+                <button class="btn btn-primary">Sign up FREE</button>
+                <button class="btn">Log in</button>
+            </div>
+        </div>
+    </nav>
+    <section class="trending-section">
+        <button class="slider-arrow left" onclick="slideQuizzes('left')">←</button>
+        <div class="trending-container">
+            <div class="trending-scroll" id="trendingScroll">
+                <!-- Quiz cards will be inserted here by JavaScript -->
+            </div>
+        </div>
+        <button class="slider-arrow right" onclick="slideQuizzes('right')">→</button>
+    </section>
+    <section class="main-content">
+        <div class="content-card">
+            <h2 style="color: #2563eb;">QuizMaster for 1st Grade</h2>
+            <p>a fun, interactive assessment designed to test basic knowledge on topics like colors, shapes, numbers, simple animals, everyday objects, and early reading skills</p>
+            <button class="btn btn-primary">Play now</button>
+        </div>
+
+        <div class="content-card">
+            <h2 style="color: #dc2626;">QuizMaster+ for Grade 2</h2>
+            <p>fun and engaging questions covering basic concepts in subjects like math (addition, subtraction, simple multiplication), reading comprehension (identifying main ideas, basic vocabulary), science (animals, weather, basic life cycles), and general knowledge (colors, shapes, days of the week)</p>
+            <button class="btn btn-primary">Play now</button>
+        </div>
+
+        <div class="content-card">
+            <h2 style="color: #ea580c;">QuizMaster+ pro for grade 3</h2>
+            <p>a short test designed to assess a third-grade student's knowledge across various subjects like basic math, reading comprehension, science facts, general knowledge, and vocabulary, featuring multiple-choice, true/false, and simple fill-in-the-blank questions that are appropriate for their age and learning level, often incorporating fun and engaging themes to make learning enjoyable</p>
+            <button class="btn btn-primary">Play now</button>
+        </div>
+
+        <div class="content-card">
+            <h2 style="color: #16a34a;">QuizMaster+ expert for grade 4</h2>
+            <p>a mix of general knowledge questions across subjects like science, geography, history, and basic math, focusing on simple concepts and familiar topics with multiple-choice or short answer questions designed to assess a young student's understanding of the world around them</p>
+            <button class="btn btn-primary">Play now</button>
+        </div>
+        <div class="content-card">
+            <h2 style="color: black;">QuizMaster+ Champion for grade 5</h2>
+            <p>a fun and engaging assessment designed to test a 5th grader's knowledge across various subjects like math, science, English, and general knowledge, featuring age-appropriate questions with multiple-choice, true/false, and short answer formats, aiming to challenge their understanding while keeping the content accessible and interesting</p>
+            <button class="btn btn-primary">Play now</button>
+        </div>
+    </section>
+    
+
+    <script>
+    
+    const trendingQuizzes = [
+        { icon: "🧮", title: "Maths", link: "maths.html" },
+        { icon: "🔬", title: "EVS", link: "evs.html" },
+        { icon: "🧠", title: "General Knowledge", link: "gk.html" },
+        { icon: "🌍", title: "Social Studies", link: "social.html" },
+        { icon: "✒️", title: "English Literature", link: "literature.html" },
+        { icon: "📚", title: "English Grammar", link: "grammar.html" },
+        { icon: "🏀", title: "Sports Trivia", link: "sports.html" }
+    ];
+
+    function createQuizCard(quiz) {
+        return `
+            <a href=${quiz.link}" class="quiz-card" style="background-color:beige ;color:black">
+                <div class="quiz-icon">${quiz.icon}</div>
+                <div class="quiz-title">${quiz.title}</div>
+            </a>
+        `;
+    }
+
+    function initializeTrendingQuizzes() {
+        const scrollContainer = document.getElementById('trendingScroll');
+        const quizCards = trendingQuizzes.map(quiz => createQuizCard(quiz)).join('');
+        scrollContainer.innerHTML = quizCards;
+    }
+
+    initializeTrendingQuizzes();
+
+        function slideQuizzes(direction) {
+            const maxScroll = -(trendingQuizzes.length * cardWidth);
+            
+            if (direction === 'right') {
+                currentPosition -= cardWidth;
+                if (currentPosition < maxScroll) {
+                    currentPosition = 0;
+                }
+            } else {
+                currentPosition += cardWidth;
+                if (currentPosition > 0) {
+                    currentPosition = maxScroll + cardWidth;
+                }
+            }
+            
+            scrollContainer.style.transform = `translateX(${currentPosition}px)`;
+        }
+
+        function startAutoScroll() {
+            setInterval(() => slideQuizzes('right'), 2000);
+        }
+
+        // Initialize content
+        initializeTrendingQuizzes();
+        startAutoScroll();
+    </script>
+    
+    <section id="about-us" class="about-us">
+        <h2>About Us</h2>
+        <p>
+            Welcome to <strong>QuizMaster</strong>, an engaging and educational platform designed  
+            to make learning fun for primary school children! Our interactive quizzes,  
+            video tutorials, and school activities help kids develop essential skills  
+            while enjoying the learning process.
+        </p>
+    
+        <h3>Our Mission</h3>
+        <p>
+            Our mission is to create a dynamic learning environment that inspires curiosity,  
+            fosters creativity, and enhances knowledge retention. We aim to provide children  
+            with an enjoyable and effective way to strengthen their understanding of core subjects  
+            through gamified learning.
+        </p>
+    <br>
+        <h3>Our Vision</h3>
+        <p>
+            We envision a world where every child has access to high-quality, engaging education  
+            that empowers them to explore, grow, and succeed. By integrating innovative teaching  
+            tools with fun and interactive content, we strive to make learning an adventure that  
+            kids look forward to every day.
+        </p>
+        <br>
+    
+        <h3>What We Offer</h3>
+        <ul style="text-align: left; display: inline-block;">
+            <li>Exciting quizzes covering various subjects</li>
+            <li>Engaging video tutorials for interactive learning</li>
+            <li>School activities to reinforce classroom concepts</li>
+            <li>Olympiad preparation for young achievers</li>
+            <li>Fun and competitive learning modes for kids</li>
+        </ul>
+    </section>
+    
+    <section id="contact-us" class="contact-us">
+        <h2>Contact Us</h2>
+        <div style="display: flex; justify-content: space-between; max-width: 1200px; margin: auto;">
+            <div class="contactleft" style="flex: 1; text-align: left;">
+                <p style="text-align:center"><strong>Sanjana Raghunath</strong></p><br>
+                <img src="sanjana.jpg" class="img"><br>                <p style="text-align:center">Email: sanjana.raghunath2023@vitstudent.ac.in</p>
+                <p style="text-align:center">Phone: 1234567890</p>
+                <p style="text-align:center">Address: Thillai Ganga Nagar, Chennai</p>
+            </div>
+            <div class="contactcenter" style="flex: 1; text-align: center;">
+                <p><strong>Menmangai M</strong></p><br>
+                <img src="menmangai.jpg"class="img"><br>
+                <p>Email: menmangai.m2023@vitstudent.ac.in</p>
+                <p>Phone: 3428553093</p>
+                <p>Address: SRP, Chennai</p>
+            </div>
+            <div class="contactright" style="flex: 1; text-align: right;">
+                <p style="text-align:center"><strong>Sakshee Ujjwal Kumat</strong></p><br>
+                <img src="sakshee.jpg" class="img"><br>
+                <p style="text-align:center">Email: sakshee.ujjwalkumat2023@vitstudent.ac.in</p>
+                <p style="text-align:center">Phone: 8643729457</p>
+                <p style="text-align:center">Address: Tambaram, Chennai</p>
+            </div>
+        </div>
+    </section>
+    
+
+    <script>
+        function scrollToAboutUs() {
+            document.getElementById('about-us').scrollIntoView({ behavior: 'smooth' });
+        }
+        function scrollToContactUs() {
+            document.getElementById('contact-us').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

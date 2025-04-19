@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Quizzes for Kids</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom right, #6DD5FA, #FF758C);
+            margin: 0;
+            padding: 0;
+            text-align: center;
+            color: white;
+        }
+
+        .container {
+            width: 85%;
+            margin: 40px auto;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+            color: black;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #333;
+        }
+
+        .quiz-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+            background: #f9f9f9;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .quiz-section:hover {
+            transform: scale(1.03);
+        }
+
+        .quiz-section img {
+            width: 180px;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .quiz-info {
+            flex: 1;
+            margin-left: 20px;
+            text-align: left;
+        }
+
+        .quiz-info h3 {
+            font-size: 24px;
+            color: #222;
+        }
+
+        .quiz-info p {
+            font-size: 18px;
+            color: #555;
+        }
+
+        .options {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .options button {
+            background-color: #FF5733;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .options button:hover {
+            background-color: #C70039;
+            transform: translateY(-3px);
+        }
+
+        
+
+        
+    </style>
+</head>
+<body style="background-image:url('mathsworksheet.jpeg');background-position:center;height:100px">
+
+<div class="container">
+    <h1>🧮 Math Quizzes for Kids 🎯</h1>
+
+    
+
+    <div class="quiz-section">
+        <img src="quiz1.png" alt="Addition Quiz">
+        <div class="quiz-info">
+            <h3>➕ Addition</h3>
+            <p>Recommended Grade: 1</p>
+            <div class="options">
+                <button onclick="downloadwork('Addition')">📥 Download Worksheet</button>
+                <button onclick="open()"><a href="addition.html">📥 Open worksheet</a></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-section">
+        <img src="quiz2.png" alt="Division Quiz">
+        <div class="quiz-info">
+            <h3>➗ Division</h3>
+            <p>Recommended Grade: 1</p>
+            <div class="options">
+                <button onclick="downloadwork('Division')">📥 Download worksheet</button>
+                <button onclick="open()"><a href="division.html">📥 Open Worksheet</a></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function downloadwork(subject) {
+        alert("Downloading the " + subject + " worksheet...");
+    }
+    
+</script>
+
+</body>
+</html>

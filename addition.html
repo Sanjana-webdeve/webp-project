@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ADDITION FOR GRADE 1</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #00796b;
+        }
+        .question {
+            background-color: white;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 10px;
+            border-left: 5px solid #4db6ac;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        .options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding-left: 20px;
+        }
+        .option {
+            background-color: #e0f2f1;
+            padding: 10px 15px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .option:hover {
+            background-color: #b2dfdb;
+            transform: translateY(-2px);
+        }
+        .correct {
+            background-color: lightgreen !important;
+        }
+        .incorrect {
+            background-color: lightcoral !important;
+        }
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+        .score-board {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 15px;
+            background: #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            display: none;
+        }
+        .progress-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            background: conic-gradient(lightgreen 0% 0%, lightgray 0%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Fun with Numbers: Addition</h1>
+        <div id="questions-container"></div>
+        <button onclick="calculateScore()" style="margin-top: 20px; padding: 10px 20px; border: none; background-color: #00796b; color: white; border-radius: 5px; cursor: pointer;">Submit Worksheet</button>
+        <div class="score-board" id="score-board">
+            <h2>Quiz Results</h2>
+            <p>Correct Answers: <span id="correct-count">0</span></p>
+            <p>Incorrect Answers: <span id="incorrect-count">0</span></p>
+            <p>Final Score: <span id="final-score">0</span>/10</p>
+            <div class="progress-circle" id="progress-circle">0%</div>
+        </div>
+    </div>
+    
+    <script>
+        const questions = [
+            { q: "3 + □ = 7", answer: 4 },
+            { q: "□ + 2 = 6", answer: 4 },
+            { q: "8 = □ + 5", answer: 3 },
+            { q: "4 + □ = 10", answer: 6 },
+            { q: "□ + 1 = 5", answer: 4 },
+            { q: "7 = 2 + □", answer: 5 },
+            { q: "3 = □ + 2", answer: 1 },
+            { q: "6 + □ = 9", answer: 3 },
+            { q: "2 + □ = 9", answer: 7 },
+            { q: "6 + 9 = □", answer: 15 }
+        ];
+
+        let correctAnswers = 0;
+        let incorrectAnswers = 0;
+
+        function loadQuestions() {
+            const container = document.getElementById("questions-container");
+            questions.forEach((item, index) => {
+                let options = [item.answer, item.answer - 1, item.answer + 1, item.answer + 2].sort(() => Math.random() - 0.5);
+                let questionHTML = `<div class='question'>
+                    <div>${index + 1}. ${item.q}</div>
+                    <div class='options'>
+                        ${options.map(opt => `<div class='option' onclick='checkAnswer(this, ${item.answer})'>${opt}</div>`).join('')}
+                    </div>
+                    <div class='feedback'></div>
+                </div>`;
+                container.innerHTML += questionHTML;
+            });
+        }
+
+        function checkAnswer(element, correctAnswer) {
+            let selectedAnswer = parseInt(element.textContent);
+            let parent = element.parentElement;
+            let feedback = parent.nextElementSibling;
+
+            parent.querySelectorAll('.option').forEach(option => option.onclick = null);
+            parent.querySelectorAll('.option').forEach(option => option.classList.remove('correct', 'incorrect'));
+            
+            if (selectedAnswer === correctAnswer) {
+                element.classList.add('correct');
+                feedback.textContent = 'Correct! 🎉';
+                feedback.style.color = 'green';
+                correctAnswers++;
+            } else {
+                element.classList.add('incorrect');
+                feedback.textContent = 'Incorrect! ❌';
+                feedback.style.color = 'red';
+                incorrectAnswers++;
+            }
+        }
+
+        function calculateScore() {
+            let scoreBoard = document.getElementById("score-board");
+            let progressCircle = document.getElementById("progress-circle");
+            let percentage = (correctAnswers / questions.length) * 100;
+            
+            document.getElementById("correct-count").textContent = correctAnswers;
+            document.getElementById("incorrect-count").textContent = incorrectAnswers;
+            document.getElementById("final-score").textContent = correctAnswers;
+            
+            progressCircle.textContent = Math.round(percentage) + "%";
+            progressCircle.style.background = `conic-gradient(lightgreen ${percentage}%, lightgray ${percentage}%)`;
+            
+            scoreBoard.style.display = "block";
+        }
+
+        loadQuestions();
+    </script>
+</body>
+</html>
