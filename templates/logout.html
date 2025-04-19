@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" 
+          content="width=device-width, 
+                   initial-scale=1,
+                   shrink-to-fit=no" />
+    <link rel="stylesheet" 
+          href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <title>Quiz Master Logout Form</title>
+</head>
+
+<body class="bg-primary">
+    <div class="container pt-5">
+	
+	<img src="\static\QM_IMG.jpg" class="rounded-circle mx-auto d-block" alt="QUIZMASTER"/>
+    </div>
+    <h3 class="strong text-center text-white"> Welcome to User Logout Form</h3>
+    {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        <div class="container mt-3">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+            {% if redirect_url %}
+            <script>
+                setTimeout(function() {
+                    fetch("{{ url_for('clear_flash_messages') }}", { method: "POST" });
+                }, 1000); 
+            </script>
+        {% endif %}
+        </div>
+    {% endif %}
+{% endwith %}
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="loginForm"  action="{{ url_for('logout') }}" method="POST" >
+                            <div class="form-group">
+                                <h6>Are you sure you want to log out?</h6>
+                            </div>
+                            <a href="{{ url_for('login') }}" class="btn btn-danger">Ok</a>
+                            {% if admin%}
+                            <a href="{{ url_for('admin_Dashboard') }}" class="btn btn-secondary">Cancel</a>
+                            {%else%}
+                            <a href="{{ url_for('user_Dashboard')}}" class="btn btn-secondary">Cancel</a>
+                            {%endif%}
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

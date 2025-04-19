@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" 
+          content="width=device-width, 
+                   initial-scale=1,
+                   shrink-to-fit=no" />
+    <link rel="stylesheet" 
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <title>QM-User Search</title>
+</head>
+<body class="bg-primary">
+    <div class="container pt-5">
+        <h3 class="text-white text-center">Search Results for "{{ quer }}"</h3>
+
+        <div class="card mt-4">
+            <div class="card-body">
+                {%if sc%}
+                <h5 class ="card title">Scores</h5>
+                <ul class="list-group">
+                    {%for sr in sc%}
+                        <li class="list-group-item">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#sr{{sr.s_id}}">
+                                <strong>{{sr.score}}</strong>
+                                <span>&darr;</span>
+                            </button>
+                            <div id="sr{{sr.s_id}}" class="collapse">
+                                <p><strong>Score Id: </strong>{{sr.s_id}}</p>
+                                <p><strong>Date of Quiz Taken: </strong>{{sr.date_taken}}</p>
+                                <p><strong>Time taken to complete quiz: </strong>{{sr.dur}}</p>
+                                <p><strong>Quiz Id: </strong>{{sr.quiz_id}}</p>
+                            
+                            </div>
+                        </li>
+                        {%endfor%}
+                </ul>
+                {%endif%}
+                {%if sub%}
+                <h5 class="card title">Subject</h5>
+                <ul class="list-group">
+                    {%for s in sub%}
+                        <li class="list-group-item">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#s{{s.sub_id}}">
+                                <strong>{{s.sub_name}}</strong>
+                                <span>&darr;</span>
+                            </button>
+                            <div id="s{{s.sub_id}}" class="collapse">
+                                <p><strong>Subject Id: </strong>{{s.sub_id}}</p>
+                                <p><strong>Description: </strong>{{s.desc}}</p>                                
+                            </div>
+                        </li>
+                        {%endfor%}
+                </ul>
+                {%endif%}
+                {%if quiz%}
+                <h5 class ="card title">Quiz</h5>
+                <ul class="list-group">
+                    {%for q in quiz%}
+                        <li class="list-group-item">
+                            <button class="btn btn-link" data-toggle="collapse" data-target="#q{{q.quiz_id}}">
+                                <strong>{{q.title}}</strong>
+                                <span>&darr;</span>
+                            </button>
+                            <div id="q{{q.quiz_id}}" class="collapse">
+                                <p><strong>Quiz Id: </strong>{{q.quiz_id}}</p>
+                                <p><strong>Date : </strong>{{q.date_quiz}}</p>
+                                <p><strong>Duration: </strong>{{q.time_dur}} mins</p>
+                                <p><strong>Remarks: </strong>{{q.remarks}}</p>
+                            </div>
+                        </li>
+                        {%endfor%}
+                </ul>
+                {%endif%}
+
+                <a href="/user_Dashboard" class="btn btn-danger">Back to Dashboard</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>QM View Quiz</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" 
+          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" /> 
+</head>
+<body class="bg-primary">
+<div class="container pt-5">
+	<h3 class="strong text-center text-white">View Quiz</h3>
+</div>
+<div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="viewQuizForm" action="{{ url_for('view_quiz', quiz_id=quiz.quiz_id) }}" method="POST">
+                            <div class="form-group">
+                                <label for="qID">
+                                    ID
+                                </label>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="qID" name="qID" value="{{ quiz.quiz_id}}" readonly="readonly"
+                                        required />
+                            </div>
+                            <div class="form-group">
+                                <label for="sub">
+                                    Subject
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="sub" name="sub" value="{{quiz.chapter.subject.sub_name}}" readonly="readonly"
+                                        required />
+                            </div>
+                            <div class="form-group">
+                                <label for="chap">
+                                    Chapter
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="chap" name="chap" value="{{quiz.chapter.chap_name}}" readonly="readonly"
+                                        required />
+                            </div>
+                            <div class="form-group">
+                                <label for="ques">
+                                    No. of Questions
+                                </label>
+                                <input type="number" 
+                                       class="form-control" 
+                                       id="ques" name="ques" value="{{quiz.questions|length}}" readonly="readonly"
+                                        required />
+                            </div>
+                            <div class="form-group">
+                                <label for="dat">
+                                    Scheduled Date
+                                </label>
+                                <input type="date" 
+                                       class="form-control" 
+                                       id="dat" name="dat" value="{{quiz.date_quiz}}" readonly="readonly"
+                                        required />
+                            </div>
+                            <div class="form-group">
+                                <label for="dur">
+                                    Duration
+                                </label>
+                                <input type="time" step="1"
+                                       class="form-control" 
+                                       id="dur" name="dur" value="{{quiz.time_dur}}" readonly="readonly"
+                                        required />
+                            </div>
+                            {% if not admin%}
+                                <a href="{{ url_for('user_Dashboard')}}" class="btn btn-secondary">Cancel</a>
+                            {%endif%}
+                            </div>
+                        </form>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

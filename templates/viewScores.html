@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" 
+          content="width=device-width, 
+                   initial-scale=1,
+                   shrink-to-fit=no" />
+    <link rel="stylesheet" 
+          href=
+"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <title>QM-View Scores</title>
+</head>
+
+<body class="bg-primary">
+   <div class="container pt-5">
+	<h3 class="strong text-center text-white">Scores</h3>
+  </div>
+  
+  <nav class="navbar navbar-expand-sm bg-warning navbar-dark">
+  <div class="container">
+    
+    <ul class="navbar-nav">
+      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/user_Dashboard">Home</a></li>
+      <li class="nav-item active px-3 py-0 navbar-text"><a class='nav-link' href="/viewScores">Scores</a></li>
+      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/results">Summary</a></li>
+      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="{{url_for('logout')}}">Logout</a></li>
+    </ul>
+    <form class="navbar-form navbar-left" action="{{url_for('user_search')}}" method="GET">
+        <div class="input-group">
+          <input type="search" class="form-control" placeholder="Subjects/Scores/Quiz by Date" name="query" id="ad_search"/>    
+          <div class="input-group-append">
+            <button class="btn btn-success" type="submit">Go</button>
+         </div>
+        </div>
+      </form>
+    <div class="navbar-header">
+      <span class="strong text-light" style="font-size:large">Welcome User</span>
+    </div>
+  </div>
+</nav>
+{% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+        <div class="container mt-3">
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            {% endfor %}
+            {% if redirect_url %}
+            <script>
+                setTimeout(function() {
+                    fetch("{{ url_for('clear_flash_messages') }}", { method: "POST" });
+                }, 1000); 
+            </script>
+        {% endif %}
+        </div>
+    {% endif %}
+{% endwith %}
+<div class="container-fluid pt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg mb-4">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Quiz Scores</h5>
+                </div>
+                <div class="card-header bg-white text-blue">
+                    <table class="table mb-0">
+                      <thead>
+                          <tr>
+                              <th>Id</th>
+                              <th>No of Questions</th>
+                              <th>Date</th>
+                              <th>Scores</th>
+                             
+                          </tr>
+                      </thead>
+                  </table>
+                </div>
+                <div class="card-body">
+                    {% for sc in scores %}
+                    <div class="d-flex justify-content-between border-bottom py-2">
+                        <span><strong>{{sc.quiz_id}}</strong></span>
+                        <span><strong>{{sc.tot_q}}</strong></span>
+                        <span><strong>{{sc.date_taken}}</strong></span>
+                        <span><strong>{{sc.score}}/{{sc.tot_q}}</strong></span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>           
+</div>
+
+</body>
+
+</html>
