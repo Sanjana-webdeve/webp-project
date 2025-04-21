@@ -29,6 +29,14 @@ class User(db.Model):
     admin=db.Column(db.Boolean, nullable=False, default=False)
     scores = db.relationship("Score", backref='user', lazy=True)
 
+class Tutorials(db.Model):
+    __tablename__ = 'tutorials'
+    tut_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
+    tut_name = db.Column(db.String(20), nullable=False)
+    tut_link = db.Column(db.Text, nullable=False)
+    tut_desc = db.Column(db.String(50), nullable=False)
+    chap_id = db.Column(db.Integer, db.ForeignKey("chapter.chap_id", ondelete="CASCADE"), nullable=False)
+
 
 class Subject(db.Model):
     __tablename__ = 'subject'
@@ -45,6 +53,7 @@ class Chapter(db.Model):
     desc = db.Column(db.String(50))
     sub_id = db.Column(db.Integer, db.ForeignKey("subject.sub_id", ondelete="CASCADE"), nullable=False)
     quizzes = db.relationship("Quiz", backref='chapter', lazy=True, cascade="all, delete")
+    tutorials = db.relationship("Tutorials", backref='chapter', lazy=True, cascade="all, delete")
 
 class Quiz(db.Model):
     __tablename__ = 'quiz'
@@ -687,6 +696,66 @@ def view_quiz(quiz_id):
     if not quiz:
         flash("Quiz not found!","danger")
     return render_template('viewQuiz.html',quiz=quiz, admin=admin_or_not)
+
+@app.route('/tutorials')
+def tutorials():
+    tut=Tutorials.query.all()
+    return render_template('tutorials.html',tut=tut)
+
+@app.route('/usertutorials', methods=["GET"])
+def usertutorials():
+    tutorial=Tutorials.query.all()
+    t=[]
+    for tut in tutorial:
+        chap=Chapter.query.get(tut.chap_id)
+        if int(chap.standard)==int(session.get('std')):
+            t.append(tut)
+    return render_template('usertutorial.html', t=t)
+
+@app.route('/addTutorials', methods=['GET','POST'])
+def addTutorials():
+    if request.method=="POST":
+        chap=request.form.get("chap_id")
+        title=request.form.get("name")
+        link = request.form.get("link")
+        desc=request.form.get("desc")
+
+        if not chap or not title or not link or not desc:
+            flash("All fields are required!","danger")
+            return redirect(url_for("add_quiz"))
+        else:
+            chap_ex=Chapter.query.get(chap)
+            if not chap_ex:
+                flash("Chapter does not exist! Go and create it here","warning")
+                return redirect(url_for("admin_Dashboard"))
+            equiz=Quiz.query.filter_by(title=title).first()
+            if equiz:
+                flash("Tutorials already exists!","warning")
+                return redirect(url_for("tutorials"))
+            else:
+
+                new_tutorial=Tutorials(tut_name=title,tut_link=link,tut_desc=desc,chap_id=chap)
+                try:
+                    db.session.add(new_tutorial)
+                    db.session.commit()
+                    flash("Tutorial added successfully!","success")
+                except Exception as e:
+                    db.session.rollback()
+                    flash(f"Error: {str(e)}","danger")
+                return redirect(url_for("tutorials"))
+    return render_template("addTutorials.html")
+
+@app.route("/deleteTut/<int:tut_id>")
+def delete_tut(tut_id):
+    tut = Tutorials.query.get(tut_id)
+    try:
+        db.session.delete(tut)
+        db.session.commit()
+        flash("Tutorials deleted successfully!", "success")
+    except Exception as e:
+        db.session.rollback()
+        flash(f"Error: {str(e)}", "danger")
+    return redirect(url_for("tutorials"))
 
 @app.route('/startQuiz/<int:quiz_id>',methods=['GET','POST'])
 def start_quiz(quiz_id):

@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" 
+          content="width=device-width, 
+                   initial-scale=1,
+                   shrink-to-fit=no" />
+    <title>QM-User Summary</title>
+    <style>
+      body {
+        background-image: url("{{ url_for('static', filename='quizimage.png') }}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        font-family: 'Segoe UI', sans-serif;
+        margin: 0;
+        padding: 0;
+    }
+
+    .nav-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    
+    .nav-search {
+      flex: 1 1 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 15px;
+    }
+    
+    .search-form {
+      display: flex;
+      width: 60%;
+      max-width: 600px;
+    }
+    
+    .search-form input[type="search"] {
+      flex: 1;
+      padding: 10px 15px;
+      font-size: 18px;
+      border-radius: 8px 0 0 8px;
+      border: none;
+      outline: none;
+    }
+    
+    .search-form button {
+      padding: 10px 20px;
+      font-size: 18px;
+      border-radius: 0 8px 8px 0;
+      border: none;
+      background-color: #ffd700;
+      color: #6a0dad;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    
+    .search-form button:hover {
+      background-color: #ffeb3b;
+    }          
+
+    
+    .logo {
+      color: white;
+      font-size: 26px;
+      font-weight: bold;
+    }
+    
+    .nav-links a,
+    .nav-links button {
+      margin-left: 20px;
+      text-decoration: none;
+      color: white;
+      background: transparent;
+      border: none;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    
+    .nav-links button:hover,
+    .nav-links a:hover {
+      color: #ffd700;
+    }
+    
+    nav {
+      background-color: #6a0dad;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 15px 30px;
+    }
+  
+    .nav-links {
+      margin-top: 10px;
+    }
+    .container.pt-5 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 60px;
+        margin-top: 40px;
+        flex-wrap: wrap;
+    }
+
+
+    @media screen and (max-width: 768px) {
+        .nav-links {
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-start;
+        }
+
+        .search-form {
+            width: 100%;
+        }
+
+        .container.pt-5 {
+            flex-direction: column;
+        }
+    }
+    .flash-container {
+      margin: 20px;
+    }
+    
+    .flash-message {
+      padding: 10px;
+      background-color: rgba(192, 243, 9, 0.8);
+      color: black;
+      border-radius: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .flash-message span {
+      float: right;
+      cursor: pointer;
+    }
+    
+  </style>  
+</head>
+
+<body>
+  <nav>
+    <div class="nav-container">
+        <div class="logo">QuizMaster</div>
+        <div class="nav-links">
+            <a href="/user_Dashboard">Home</a>
+            <a href="/about">About Us</a>
+            <button onclick="scrollToContactUs()">Contact Us</button>
+            <a href="/upquiz">Upcoming Quizzes</a>
+            <a href="/viewScores">Scores</a>
+            <a href="/usertutorials">Tutorials</a>
+            <a href="/results">Summary</a>
+            <a href="/creators">Creators</a>
+            <a href="{{url_for('logout')}}">Logout</a>            
+        </div>
+        <div class="nav-search">
+        <form action="{{url_for('user_search')}}" method="GET" class="search-form">
+            <input type="search" name="query" id="ad_search" placeholder="Subjects/Scores/Quiz by Date" />
+            <button type="submit">Go</button>
+        </form>
+        </div>
+<script>
+    function scrollToSection() {
+        document.getElementById('target-section').scrollIntoView({ behavior: 'smooth' });
+    }
+</script>
+    </div>
+</nav>
+{% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+  <div class="flash-container">
+    {% for category, message in messages %}
+    <div class="flash-message">
+      {{ message }}
+      <span onclick="this.parentElement.style.display='none';">&times;</span>
+    </div>
+    {% endfor %}
+    {% if redirect_url %}
+    <script>
+      setTimeout(function () {
+        fetch("{{ url_for('clear_flash_messages') }}", { method: "POST" });
+      }, 1000);
+    </script>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% endwith %}
+  <div class="container pt-5">
+    {% for tut in t %}
+    <div style="background-color: rgba(255,255,255,0.8); padding: 20px; border-radius: 10px; max-width: 300px; text-align: center;">
+      <h3 style="color: #6a0dad;">{{ tut.name }}</h3>
+     <a href="{{ tut.link }}" target="_blank" style="color: #6a0dad; font-weight: bold; text-decoration: underline;">Open Tutorial</a>
+      <p>{{ tut.description }}</p>
+    </div>
+    {% endfor %}
+  </div>
+</body>
+
+</html>
