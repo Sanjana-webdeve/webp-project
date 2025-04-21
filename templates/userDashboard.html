@@ -1,107 +1,446 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" 
-          content="width=device-width, 
-                   initial-scale=1,
-                   shrink-to-fit=no" />
-     
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QuizMaster - Learning Made Fun</title>
+    <style>
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+          }
           
-    <title>QM-User Dashboard</title>
-</head>
-
-<body style="background-image:url('quizimage.jpeg')" ; class="bg-primary">
-   <div class="container pt-5">
-	<h3 class="strong text-center text-white"> User Dashboard</h3>
-  </div>
-  
-  <nav class="navbar navbar-expand-sm bg-warning navbar-dark">
-  <div class="container">
+          .nav-search {
+            flex: 1 1 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+          }
+          
+          .search-form {
+            display: flex;
+            width: 60%;
+            max-width: 600px;
+          }
+          
+          .search-form input[type="search"] {
+            flex: 1;
+            padding: 10px 15px;
+            font-size: 18px;
+            border-radius: 8px 0 0 8px;
+            border: none;
+            outline: none;
+          }
+          
+          .search-form button {
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 0 8px 8px 0;
+            border: none;
+            background-color: #ffd700;
+            color: #6a0dad;
+            cursor: pointer;
+            font-weight: bold;
+          }
+          
+          .search-form button:hover {
+            background-color: #ffeb3b;
+          }          
     
-    <ul class="navbar-nav">
-      <li class="nav-item active px-3 py-0 navbar-text"><a class='nav-link' href="/user_Dashboard">Home</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/viewScores">Scores</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/results">Summary</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="{{url_for('logout')}}">Logout</a></li>
-    </ul>
-    <form class="navbar-form navbar-left" action="{{url_for('user_search')}}" method="GET">
-        <div class="input-group">
-          <input type="search" class="form-control" placeholder="Subjects/Scores/Quiz by Date" name="query" id="ad_search"/>    
-          <div class="input-group-append">
-            <button class="btn btn-success" type="submit">Go</button>
-         </div>
+          
+          .logo {
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+          }
+          
+          .nav-links a,
+          .nav-links button {
+            margin-left: 20px;
+            text-decoration: none;
+            color: white;
+            background: transparent;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+          }
+          
+          .nav-links button:hover,
+          .nav-links a:hover {
+            color: #ffd700;
+          }
+          
+         
+          .trending-section {
+            margin: 60px auto;
+            max-width: 1100px;
+            position: relative;
+            padding: 20px;
+          }
+          
+          .trending-container {
+            overflow: hidden;
+            position: relative;
+            height: 320px;
+          }
+          
+          .trending-scroll {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            will-change: transform;
+          }
+          
+          .quiz-card {
+            width: 250px;
+            height: 250px;
+            background: linear-gradient(to bottom right, #a64ca6, #6a0dad); /* Gradient purple */
+            color: white;
+            border-radius: 20px;
+            margin-right: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+          }
+          
+          .quiz-card:hover {
+            transform: scale(1.07);
+          }
+          
+          .quiz-icon {
+            font-size: 60px;
+            margin-bottom: 15px;
+          }
+          
+          .quiz-title {
+            font-size: 18px;
+            text-align: center;
+            font-weight: bold;
+          }
+          
+          
+          .slider-arrow {
+            position: absolute;
+            top: 45%;
+            transform: translateY(-50%);
+            background-color: #fff;
+            color: #6a0dad;
+            border: none;
+            font-size: 28px;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 50%;
+            z-index: 2;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.3);
+          }
+          
+          .slider-arrow.left {
+            left: 0px;
+          }
+          
+          .slider-arrow.right {
+            right: 0px;
+          }
+          
+          
+          .contact-us {
+            background-color: #000; 
+            color: white;
+            padding: 50px 40px;
+            font-family: 'Segoe UI', sans-serif;
+          }
+          
+          .contact-us h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 40px;
+          }
+          
+          .contact-us p,
+          .contact-us a {
+            font-size: 15px;
+            color: white;
+            margin-bottom: 5px;
+            text-decoration: none;
+          }
+          
+          .contact-us img {
+            margin: 20px 10px;
+          }
+          
+          .contact-us h3 {
+            margin-top: 30px;
+            color: #ffd700;
+          }
+          
+          
+          @media screen and (max-width: 768px) {
+            .quiz-card {
+              width: 200px;
+              height: 220px;
+            }
+          
+            .trending-container {
+              height: 250px;
+            }
+          
+            nav {
+                background-color: #6a0dad;
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 15px 30px;
+              }
+          
+            .nav-links {
+              margin-top: 10px;
+            }
+          
+            .slider-arrow {
+              font-size: 22px;
+              padding: 8px;
+            }
+          }  
+          body {
+            background-image: url("{{ url_for('static', filename='QUIZMASTER (1).png') }}");
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+          }  
+          .footer-links {
+            display: flex;
+            justify-content: center; 
+            gap: 60px;
+            background-color: black;
+            color: white;
+            padding: 20px;
+        }
+    
+        .footer-links span {
+            flex: 1;
+            padding: 10px;
+        }
+    
+        .footer-links h3 {
+            color: yellow;
+            font-weight: bold;
+        }
+    
+        .footer-links a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            margin-bottom: 5px;
+        }
+    
+        .footer-links a:hover {
+            text-decoration: underline;
+        }    
+    </style>
+</head>
+<body>
+<nav>
+        <div class="nav-container">
+            <div class="logo">QuizMaster</div>
+            <div class="nav-links">
+                <a href="/user_Dashboard">Home</a>
+                <a href="/about">About Us</a>
+                <button onclick="scrollToContactUs()">Contact Us</button>
+                <a href="/upquiz">Upcoming Quizzes</a>
+                <a href="/viewScores">Scores</a>
+                <a href="/results">Summary</a>
+                <a href="/creators">Creators</a>
+                <a href="{{url_for('logout')}}">Logout</a>            
+            </div>
+            <div class="nav-search">
+            <form action="{{url_for('user_search')}}" method="GET" class="search-form">
+                <input type="search" name="query" id="ad_search" placeholder="Subjects/Scores/Quiz by Date" />
+                <button type="submit">Go</button>
+            </form>
+            </div>
+    <script>
+        function scrollToSection() {
+            document.getElementById('target-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
         </div>
-      </form>
-    <div class="navbar-header">
-      <span class="strong text-light" style="font-size:large">Welcome User</span>
-    </div>
-  </div>
-</nav>
-{% with messages = get_flashed_messages(with_categories=True) %}
-    {% if messages %}
-        <div class="container mt-3">
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endfor %}
-            {% if redirect_url %}
-            <script>
-                setTimeout(function() {
-                    fetch("{{ url_for('clear_flash_messages') }}", { method: "POST" });
-                }, 1000); 
-            </script>
-        {% endif %}
-        </div>
-    {% endif %}
-{% endwith %}
-<div class="container-fluid pt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-lg mb-4">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Upcoming Quizzes</h5>
-                </div>
-                <div class="card-header bg-white text-blue">
-                    <table class="table mb-0">
-                      <thead>
-                          <tr>
-                              <th>Id</th>
-                              <th>No of Questions</th>
-                              <th>Date</th>
-                              <th>Duration(in mins)</th>
-                              <th>Action</th>
-                          </tr>
-                      </thead>
-                  </table>
-                </div>
-                <div class="card-body">
-                    {% for quiz in quizzes %}
-                    <div class="d-flex justify-content-between border-bottom py-2">
-                        <span><strong>{{quiz.quiz_id}}</strong></span>
-                        <span><strong>{{quiz.questions|length}}</strong></span>
-                        <span><strong>{{quiz.date_quiz}}</strong></span>
-                        <span><strong>{{quiz.time_dur}}</strong></span>
-                        <span>
-                            <a href="/viewQuiz/{{ quiz.quiz_id }}" class="btn btn-sm btn-info">View</a>
-                            {%if quiz.date_quiz<=td%}
-                                <a href="/startQuiz/{{ quiz.quiz_id }}" class="btn btn-sm btn-danger">Start</a>
-                            {%else%}
-                                <a href="#" class="btn btn-sm btn-danger disabled">Start</a>
-                            {%endif%}
-                        </span>
-                    </div>
-                    {% endfor %}
-                </div>
+    </nav>
+    <section class="trending-section">
+        <h1 style="color:beige;font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;text-align:center;">Our Trending Quizzes</h1>
+        <button class="slider-arrow left" onclick="slideQuizzes('left')">←</button>
+        <div class="trending-container">
+            <div class="trending-scroll" id="trendingScroll">
+                
             </div>
         </div>
-    </div>           
-</div>
-</body>
+        <button class="slider-arrow right" onclick="slideQuizzes('right')">→</button>
+    </section>
+   
 
+    
+
+
+   
+
+
+
+
+</html>
+
+    
+    
+    
+    
+
+
+<script>
+    const trendingQuizzes = [
+      { icon: "🧮", title: "Arithmetic Quiz",           link: "/mathsstart" },
+      { icon: "🔬", title: "Forests and Wildlife",      link: "/evs"       },
+      { icon: "🧠", title: "General Knowledge",        link: "/gk"        },
+      { icon: "🌍", title: "World Geography Quiz",     link: "/geostart"  },
+      { icon: "✒️", title: "Literary Devices",         link: "/literature"    },
+      { icon: "📚", title: "Articles and Prepositions",link: "/grammar"   },
+      { icon: "🏀", title: "Sports Trivia Activity",   link: "/sports"    }
+    ];
+  
+    let currentPosition = 0;
+    const cardWidth = 216;
+    const scrollContainer = document.getElementById('trendingScroll');
+  
+    function createQuizCard(quiz) {
+      const card = document.createElement('div');
+      card.className = 'quiz-card';
+  
+      const iconEl = document.createElement('div');
+      iconEl.className = 'quiz-icon';
+      iconEl.textContent = quiz.icon;
+      card.appendChild(iconEl);
+  
+      const titleEl = document.createElement('div');
+      titleEl.className = 'quiz-title';
+      titleEl.textContent = quiz.title;
+      card.appendChild(titleEl);
+  
+      card.addEventListener('click', () => {
+        window.location.href = quiz.link;
+      });
+  
+      return card;
+    }
+  
+    function initializeTrendingQuizzes() {
+      const all = trendingQuizzes.concat(trendingQuizzes);
+  
+      scrollContainer.innerHTML = '';
+  
+      all.forEach(quiz => {
+        scrollContainer.appendChild(createQuizCard(quiz));
+      });
+    }
+  
+    function slideQuizzes(direction) {
+      const maxScroll = -(trendingQuizzes.length * cardWidth);
+  
+      if (direction === 'right') {
+        currentPosition -= cardWidth;
+        if (currentPosition < maxScroll) currentPosition = 0;
+      } else {
+        currentPosition += cardWidth;
+        if (currentPosition > 0) currentPosition = maxScroll + cardWidth;
+      }
+  
+      scrollContainer.style.transform = `translateX(${currentPosition}px)`;
+    }
+  
+    function startAutoScroll() {
+      setInterval(() => slideQuizzes('right'), 2000);
+    }
+  
+    initializeTrendingQuizzes();
+    startAutoScroll();
+  </script>
+    
+    
+    
+    <section id="contact-us" class="contact-us">
+        <h2>Contact Us</h2>
+        <div style="display: flex; justify-content: space-between; max-width: 1200px; margin: auto;">
+            <div class="contactleft" style="flex: 1; text-align: left;">
+                <p style="text-align:center"><strong>Sanjana Raghunath</strong></p><br>
+                              <p style="text-align:center">Email: sanjana.raghunath2023@vitstudent.ac.in</p>
+                <p style="text-align:center">Phone: 1234567890</p>
+                <p style="text-align:center">Address: Thillai Ganga Nagar, Chennai</p>
+            </div>
+            <div class="contactcenter" style="flex: 1; text-align: center;">
+                <p><strong>Menmangai M</strong></p><br>
+                
+                <p>Email: menmangai.m2023@vitstudent.ac.in</p>
+                <p>Phone: 3428553093</p>
+                <p>Address: SRP, Chennai</p>
+            </div>
+            <div class="contactright" style="flex: 1; text-align: right;">
+                <p style="text-align:center"><strong>Sakshee Ujjwal Kumat</strong></p><br>
+                
+                <p style="text-align:center">Email: sakshee.ujjwalkumat2023@vitstudent.ac.in</p>
+                <p style="text-align:center">Phone: 8643729457</p>
+                <p style="text-align:center">Address: Tambaram, Chennai</p>
+            </div>
+        </div><br>
+        <center>
+        <p style="text-align:center; color:aliceblue">For any queries, please reach out to us at:</p>
+        <img src="{{ url_for('static', filename='insta.png') }}" width="50px" alt="Instagram">
+        <img src="{{ url_for('static', filename='facebook.png') }}" width="50px" alt="Facebook">
+        </center>
+    </section>
+    <section class="footer-links">
+
+        <span>
+        <h3>About</h3>
+            
+                <a href="#">News</a><br>
+                <a href="#">Impact</a><br>
+                <a href="#">Our Team</a><br>
+                <a href="#">Our Interns</a><br>
+                <a href="#">Careers</a><br>
+                <a href="#">Cookie Preferences</a><br>
+            
+        </span>
+        <span>
+            <h3>Contact</h3>
+            
+                <a href="#">Help Center</a><br>
+                <a href="#">Support Community</a><br>
+                <a href="#">Share Your Story</a><br>
+                <a href="#">Press</a><br>
+            
+        </span>
+        <span>
+            <h3>Courses</h3>
+            
+                <a href="#">Math (NCERT)</a><br>
+                <a href="#">Science (NCERT)</a><br>
+                <a href="#">All State Boards</a><br>
+                <a href="#">Math Foundations</a><br>
+           
+        </span>
+    </section>
+    
+
+    <script>
+        
+        function scrollToContactUs() {
+            document.getElementById('contact-us').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+    <footer style="text-align: center; padding: 10px; background: #333; color: white; position: fixed; bottom: 0; width: 100%;">
+        &copy; 2025 QuizMaster. All rights reserved.
+    </footer>
+    
+</body>
 </html>

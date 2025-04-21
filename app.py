@@ -496,6 +496,54 @@ def delete_chapter(chap_id):
         flash(f"Error: {str(e)}", "danger")
     return redirect(url_for("admin_Dashboard"))
 
+@app.route("/literature")
+def literature():
+    return render_template("literature.html")
+
+@app.route("/mathsstart")
+def mathsstart():
+    return render_template("mathsstart.html")
+
+@app.route("/gk")
+def gk():
+    return render_template("gk.html")
+
+@app.route("/grammar")
+def grammar():
+    return render_template("grammar.html")
+
+@app.route("/evs")
+def evs():
+    return render_template("evs.html")
+
+@app.route("/sports")
+def sports():
+    return render_template("sports.html")
+
+@app.route("/geostart")
+def geostart():
+    return render_template("geostart.html")
+
+@app.route("/geography")
+def geography():
+    return render_template("geography.html")
+
+@app.route("/maths")
+def maths():
+    return render_template("maths.html")
+
+@app.route("/geographyresults")
+def geographyresults():
+    return render_template("geographyresults.html")
+
+@app.route("/mathresult")
+def mathresult():
+    return render_template("mathresult.html")
+
+@app.route("/literatureresult")
+def literatureresult():
+    return render_template("literatureresult.html")
+
 @app.route("/editQuestion/<int:q_id>", methods=["GET", "POST"])
 def edit_question(q_id):
     ques = Question.query.get(q_id)
@@ -599,8 +647,8 @@ def sumamry():
     plot_graph2()
     return render_template("summary.html")
 
-@app.route('/user_Dashboard')
-def user_Dashboard():
+@app.route('/upquiz')
+def upquiz():
     u_id=session.get('u_id')
     td=date.today()
     takenquiz=Quiz.query.join(Score,Quiz.quiz_id==Score.quiz_id).filter(Score.u_id==u_id).all()
@@ -617,7 +665,19 @@ def user_Dashboard():
         chap=Chapter.query.get(quiz.chap_id)
         if len(quiz.questions)>0 and int(chap.standard)==int(session.get('std')):
             f_quizzes.append(quiz)
-    return render_template('userDashboard.html',quizzes=f_quizzes,td=td)
+    return render_template('upquiz.html',quizzes=f_quizzes,td=td)
+
+@app.route('/user_Dashboard')
+def user_Dashboard():
+    return render_template('userDashboard.html')
+
+@app.route('/about')
+def about():
+    return render_template('about.html')
+
+@app.route('/creators')
+def creators():
+    return render_template('creators.html')
 
 @app.route('/viewQuiz/<int:quiz_id>')
 def view_quiz(quiz_id):

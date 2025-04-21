@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            background: linear-gradient(purple,blue,pink);
+            padding: 30px;
+            margin: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        .timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            border: 2px solid #dee2e6;
+        }
+        .timer.warning {
+            background: #fff3cd;
+            color: #856404;
+            border-color: #ffeeba;
+        }
+        .timer.danger {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+        .question {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: white;
+        }
+        .options {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1em;
+        }
+        .option:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+        .progress {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #666;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #43cea2;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="timer" class="timer">10:00</div>
+        <h1>Articles and Prepositions Quiz</h1>
+        <div id="quiz"></div>
+        <div class="progress" id="progress"></div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div><p>Choose the correct article and prepositions.</p></div>
+    </div>
+    
+    <script>
+        const questions = [
+            {
+                question: "I saw ___ elephant at the zoo.",
+                options: ["a","an","the","no article"],
+                correct: "an"
+            },
+            {
+                question: "She ate ___ apple for lunch.",
+                options: ["a","an","the","no article"],
+                correct: "an"
+            },
+            {
+                question: "He has ___ red car.",
+                options: ["a","an","the","no article"],
+                correct: "a"
+            },
+            {
+                question: "Let’s go to ___ park.",
+                options: ["a","an","the","no article"],
+                correct: "the"
+            },
+            {
+                question: "She is reading ___ interesting book.",
+                options: ["a","an","the","no article"],
+                correct: "an"
+            },
+            {
+                question: "The cat is ___ the table.",
+                options:["in","under","behind","over"],
+                correct: "under"
+            },
+            {
+                question: "The ball is ___ the box.",
+                options: ["in","on","over","under"],
+                correct: "in"
+            },
+            {
+                question: "The boy is hiding ___ the door.",
+                options:["in","behind","under","over"],
+                correct: "behind"
+            },
+            {
+                question: "She kept her shoes ___ the bed.",
+                options:["on","in","under","behind"],
+                correct: "under"
+            },
+            {
+                question: "The bird is flying ___ the tree",
+                options: ["between","over","inside","under"],
+                correct: "over"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userResponses = [];
+        let timeLeft = 600; 
+        let timerInterval;
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const timerDisplay = document.getElementById('timer');
+            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            
+            if (timeLeft <= 60) {
+                timerDisplay.className = 'timer danger';
+            } else if (timeLeft <= 180) { 
+                timerDisplay.className = 'timer warning';
+            }
+
+            if (timeLeft <= 0) {
+                submitQuiz();
+            }
+            timeLeft--;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                updateTimer();
+            }, 1000);
+        }
+
+        function submitQuiz() {
+            clearInterval(timerInterval);
+           
+            while (currentQuestion < questions.length) {
+                userResponses.push({
+                    question: questions[currentQuestion].question,
+                    selected: "Not answered",
+                    correct: questions[currentQuestion].correct,
+                    isCorrect: false
+                });
+                currentQuestion++;
+            }
+            localStorage.setItem('geoQuizScore', score);
+            localStorage.setItem('geoUserResponses', JSON.stringify(userResponses));
+            window.location.href = "/geographyresults";
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                submitQuiz();
+                return;
+            }
+
+            const question = questions[currentQuestion];
+            const quizContainer = document.getElementById('quiz');
+            
+            quizContainer.innerHTML = `
+                <div class="question">${currentQuestion + 1}. ${question.question}</div>
+                <div class="options">
+                    ${question.options.map(option => 
+                        `<button class="option" onclick="checkAnswer('${option}')">${option}</button>`
+                    ).join('')}
+                </div>
+            `;
+
+            document.getElementById('progress').textContent = 
+                `Question ${currentQuestion + 1} of ${questions.length} `;
+            
+            document.getElementById('progressFill').style.width = 
+                `${((currentQuestion + 1) / questions.length) * 100}%`;
+        }
+
+        function checkAnswer(selected) {
+            const question = questions[currentQuestion];
+            const isCorrect = selected === question.correct;
+            
+            if (isCorrect) score++;
+
+            userResponses.push({
+                question: question.question,
+                selected: selected,
+                correct: question.correct,
+                isCorrect: isCorrect
+            });
+
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        
+        window.onload = function() {
+            loadQuestion();
+            startTimer();
+        }
+    </script>
+</body>
+</html>

@@ -67,9 +67,9 @@
     </div>
     
     <div class="container" id="image-container">
-        <img src="football.jpeg" id="football" class="drag-item" draggable="true">
-        <img src="cricket.jpeg" id="cricket" class="drag-item" draggable="true">
-        <img src="tennis.jpeg" id="tennis" class="drag-item" draggable="true">
+        <img src="{{ url_for('static', filename='football.jpeg') }}" id="football" class="drag-item" draggable="true" alt="Football">
+        <img src="{{ url_for('static', filename='cricket.jpeg') }}" id="cricket" class="drag-item" draggable="true" alt="Cricket">
+        <img src="{{ url_for('static', filename='tennis.jpeg') }}" id="tennis" class="drag-item" draggable="true" alt="Tennis">
     </div>
     
     <button onclick="resetGame()">Reset</button>
@@ -111,7 +111,7 @@
             });
         }
         function closeModal(){
-            window.location.href="webp1.html";
+            window.location.href="/user_Dashboard";
         }
     </script>
 </body>

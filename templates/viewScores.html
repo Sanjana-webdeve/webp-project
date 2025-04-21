@@ -7,70 +7,197 @@
           content="width=device-width, 
                    initial-scale=1,
                    shrink-to-fit=no" />
-    <link rel="stylesheet" 
-          href=
-"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
     <title>QM-View Scores</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-image: url("{{ url_for('static', filename='quizimage.png') }}");
+            background-size: cover;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-position: center;
+            color: white;
+          }
+          .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+          }
+          
+          .nav-search {
+            flex: 1 1 100%;
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+          }
+          
+          .search-form {
+            display: flex;
+            width: 60%;
+            max-width: 600px;
+          }
+          
+          .search-form input[type="search"] {
+            flex: 1;
+            padding: 10px 15px;
+            font-size: 18px;
+            border-radius: 8px 0 0 8px;
+            border: none;
+            outline: none;
+          }
+          
+          .search-form button {
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 0 8px 8px 0;
+            border: none;
+            background-color: #ffd700;
+            color: #6a0dad;
+            cursor: pointer;
+            font-weight: bold;
+          }
+          
+          .search-form button:hover {
+            background-color: #ffeb3b;
+          }          
+      
+          
+          .logo {
+            color: white;
+            font-size: 26px;
+            font-weight: bold;
+          }
+          
+          .nav-links a,
+          .nav-links button {
+            margin-left: 20px;
+            text-decoration: none;
+            color: white;
+            background: transparent;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+          }
+          
+          .nav-links button:hover,
+          .nav-links a:hover {
+            color: #ffd700;
+          }
+          
+          nav {
+            background-color: #6a0dad;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 15px 30px;
+          }
+        
+          .nav-links {
+            margin-top: 10px;
+          }
+          .container.pt-5 {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              gap: 60px;
+              margin-top: 40px;
+              flex-wrap: wrap;
+          }
+      
+      
+          @media screen and (max-width: 768px) {
+              .nav-links {
+                  flex-direction: column;
+                  gap: 10px;
+                  align-items: flex-start;
+              }
+      
+              .search-form {
+                  width: 100%;
+              }
+      
+      
+        
+          }
+          .flash-container {
+            margin: 20px;
+          }
+          
+          .flash-message {
+            padding: 10px;
+            background-color: rgba(192, 243, 9, 0.8);
+            color: black;
+            border-radius: 10px;
+            margin-bottom: 10px;
+          }
+          
+          .flash-message span {
+            float: right;
+            cursor: pointer;
+          }      
+    </style>
 </head>
 
 <body class="bg-primary">
-   <div class="container pt-5">
-	<h3 class="strong text-center text-white">Scores</h3>
-  </div>
-  
-  <nav class="navbar navbar-expand-sm bg-warning navbar-dark">
-  <div class="container">
-    
-    <ul class="navbar-nav">
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/user_Dashboard">Home</a></li>
-      <li class="nav-item active px-3 py-0 navbar-text"><a class='nav-link' href="/viewScores">Scores</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/results">Summary</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="{{url_for('logout')}}">Logout</a></li>
-    </ul>
-    <form class="navbar-form navbar-left" action="{{url_for('user_search')}}" method="GET">
-        <div class="input-group">
-          <input type="search" class="form-control" placeholder="Subjects/Scores/Quiz by Date" name="query" id="ad_search"/>    
-          <div class="input-group-append">
-            <button class="btn btn-success" type="submit">Go</button>
-         </div>
+    <nav>
+        <div class="nav-container">
+            <div class="logo">QuizMaster</div>
+            <div class="nav-links">
+                <a href="/user_Dashboard">Home</a>
+                <a href="/about">About Us</a>
+                <button onclick="scrollToContactUs()">Contact Us</button>
+                <a href="/upquiz">Upcoming Quizzes</a>
+                <a href="/viewScores">Scores</a>
+                <a href="/results">Summary</a>
+                <a href="/creators">Creators</a>
+                <a href="{{url_for('logout')}}">Logout</a>            
+            </div>
+            <div class="nav-search">
+            <form action="{{url_for('user_search')}}" method="GET" class="search-form">
+                <input type="search" name="query" id="ad_search" placeholder="Subjects/Scores/Quiz by Date" />
+                <button type="submit">Go</button>
+            </form>
+            </div>
+    <script>
+        function scrollToSection() {
+            document.getElementById('target-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
         </div>
-      </form>
-    <div class="navbar-header">
-      <span class="strong text-light" style="font-size:large">Welcome User</span>
-    </div>
-  </div>
-</nav>
-{% with messages = get_flashed_messages(with_categories=True) %}
+    </nav>
+    {% with messages = get_flashed_messages(with_categories=True) %}
     {% if messages %}
-        <div class="container mt-3">
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endfor %}
-            {% if redirect_url %}
-            <script>
-                setTimeout(function() {
-                    fetch("{{ url_for('clear_flash_messages') }}", { method: "POST" });
-                }, 1000); 
-            </script>
-        {% endif %}
-        </div>
+    <div class="flash-container">
+      {% for category, message in messages %}
+      <div class="flash-message">
+        {{ message }}
+        <span onclick="this.parentElement.style.display='none';">&times;</span>
+      </div>
+      {% endfor %}
+      {% if redirect_url %}
+      <script>
+        setTimeout(function () {
+          fetch("{{ url_for('clear_flash_messages') }}", { method: "POST" });
+        }, 1000);
+      </script>
+      {% endif %}
+    </div>
     {% endif %}
-{% endwith %}
+    {% endwith %}
+  
 <div class="container-fluid pt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-lg mb-4">
-                <div class="card-header bg-dark text-white">
+                <div class="card-header bg-dark text-white text-center">
                     <h5 class="mb-0">Quiz Scores</h5>
                 </div>
-                <div class="card-header bg-white text-blue">
-                    <table class="table mb-0">
-                      <thead>
+                <div class="card-body">
+                    <table class="table table-bordered text-center align-middle">
+                      <thead class="table-light">
                           <tr>
                               <th>Id</th>
                               <th>No of Questions</th>

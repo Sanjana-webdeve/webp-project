@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geography Quiz Results</title>
+    <title>Quiz Results</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -121,20 +121,20 @@
 
     <script>
         function getFeedback(percentage) {
-            if (percentage >= 90) return "Outstanding! You're a geography expert! 🏆";
-            if (percentage >= 70) return "Great job! You have solid geography knowledge! 🌟";
+            if (percentage >= 90) return "Outstanding! You're a literature expert! 🏆";
+            if (percentage >= 70) return "Great job! You have solid literature knowledge! 🌟";
             if (percentage >= 50) return "Good effort! Keep learning and improving! 📚";
-            return "Keep studying! Geography can be challenging but rewarding! 💪";
+            return "Keep studying! Literature can be challenging but rewarding! 💪";
         }
 
         function retryQuiz() {
             localStorage.clear();
-            window.location.href = 'index.html';
+            window.location.href = "/user_Dashboard";
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            const responses = JSON.parse(localStorage.getItem('geoUserResponses') || '[]');
-            const score = parseInt(localStorage.getItem('geoQuizScore') || '0');
+            const responses = JSON.parse(localStorage.getItem('litUserResponses') || '[]');
+            const score = parseInt(localStorage.getItem('litQuizScore') || '0');
             
             const totalQuestions = responses.length;
             const correctAnswers = responses.filter(r => r.isCorrect).length;
@@ -168,7 +168,7 @@
     </script>
     <script>
         function goBack() {
-            window.history.go(-3);
+            window.location.href = "/user_Dashboard";
         }
     </script>
 </body>

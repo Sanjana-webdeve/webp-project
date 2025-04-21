@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Literary Devices Quiz</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            text-align: center;
+            background: linear-gradient(135deg, #43cea2, #185a9d);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            background: linear-gradient(purple, lightpink, lavender);
+            padding: 30px;
+            margin: auto;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        .timer {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+            border: 2px solid #dee2e6;
+        }
+        .timer.warning {
+            background: #fff3cd;
+            color: #856404;
+            border-color: #ffeeba;
+        }
+        .timer.danger {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+        .question {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: white;
+        }
+        .options {
+            display: grid;
+            gap: 10px;
+            margin: 20px 0;
+        }
+        .option {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 1.1em;
+        }
+        .option:hover {
+            background: #e9ecef;
+            border-color: #adb5bd;
+        }
+        .progress {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #666;
+        }
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #e9ecef;
+            border-radius: 5px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #43cea2;
+            transition: width 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="timer" class="timer">10:00</div>
+        <h1>Literary Devices Quiz</h1>
+        <div id="quiz"></div>
+        <div class="progress" id="progress"></div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <div><p>Choose the correct literary device used in each sentence.</p></div>
+    </div>
+    
+    <script>
+        const questions = [
+            {
+                question: "She sells sea shells by the sea shore.",
+                options: ["Simile", "Alliteration", "Metaphor", "Hyperbole"],
+                correct: "Alliteration"
+            },
+            {
+                question: "The classroom was a zoo.",
+                options: ["Hyperbole", "Irony", "Metaphor", "Simile"],
+                correct: "Metaphor"
+            },
+            {
+                question: "He is as brave as a lion.",
+                options: ["Alliteration", "Metaphor", "Simile", "Personification"],
+                correct: "Simile"
+            },
+            {
+                question: "Time flew by during the fun evening.",
+                options: ["Personification", "Allusion", "Oxymoron", "Metaphor"],
+                correct: "Personification"
+            },
+            {
+                question: "I'm so hungry I could eat a horse.",
+                options: ["Hyperbole", "Metaphor", "Alliteration", "Irony"],
+                correct: "Hyperbole"
+            },
+            {
+                question: "The wind whispered through the trees.",
+                options: ["Simile", "Irony", "Personification", "Metaphor"],
+                correct: "Personification"
+            },
+            {
+                question: "His words cut deeper than a knife.",
+                options: ["Metaphor", "Simile", "Alliteration", "Onomatopoeia"],
+                correct: "Metaphor"
+            },
+            {
+                question: "Boom! The fireworks exploded in the sky.",
+                options: ["Alliteration", "Onomatopoeia", "Irony", "Metaphor"],
+                correct: "Onomatopoeia"
+            },
+            {
+                question: "She had a smile that rivaled the sun.",
+                options: ["Personification", "Simile", "Hyperbole", "Metaphor"],
+                correct: "Hyperbole"
+            },
+            {
+                question: "The silence was deafening.",
+                options: ["Oxymoron", "Irony", "Simile", "Allusion"],
+                correct: "Oxymoron"
+            }
+        ];
+
+        let currentQuestion = 0;
+        let score = 0;
+        let userResponses = [];
+        let timeLeft = 600; 
+        let timerInterval;
+
+        function updateTimer() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            const timerDisplay = document.getElementById('timer');
+            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+
+            if (timeLeft <= 60) {
+                timerDisplay.className = 'timer danger';
+            } else if (timeLeft <= 180) { 
+                timerDisplay.className = 'timer warning';
+            }
+
+            if (timeLeft <= 0) {
+                submitQuiz();
+            }
+            timeLeft--;
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function submitQuiz() {
+            clearInterval(timerInterval);
+           
+            while (currentQuestion < questions.length) {
+                userResponses.push({
+                    question: questions[currentQuestion].question,
+                    selected: "Not answered",
+                    correct: questions[currentQuestion].correct,
+                    isCorrect: false
+                });
+                currentQuestion++;
+            }
+            localStorage.setItem('litQuizScore', score);
+            localStorage.setItem('litUserResponses', JSON.stringify(userResponses));
+            window.location.href = "/literatureresult";
+        }
+
+        function loadQuestion() {
+            if (currentQuestion >= questions.length) {
+                submitQuiz();
+                return;
+            }
+
+            const question = questions[currentQuestion];
+            const quizContainer = document.getElementById('quiz');
+            
+            quizContainer.innerHTML = `
+                <div class="question">${currentQuestion + 1}. ${question.question}</div>
+                <div class="options">
+                    ${question.options.map(option => 
+                        `<button class="option" onclick="checkAnswer('${option}')">${option}</button>`
+                    ).join('')}
+                </div>
+            `;
+
+            document.getElementById('progress').textContent = 
+                `Question ${currentQuestion + 1} of ${questions.length}`;
+            
+            document.getElementById('progressFill').style.width = 
+                `${((currentQuestion + 1) / questions.length) * 100}%`;
+        }
+
+        function checkAnswer(selected) {
+            const question = questions[currentQuestion];
+            const isCorrect = selected === question.correct;
+            
+            if (isCorrect) score++;
+
+            userResponses.push({
+                question: question.question,
+                selected: selected,
+                correct: question.correct,
+                isCorrect: isCorrect
+            });
+
+            currentQuestion++;
+            loadQuestion();
+        }
+
+        window.onload = function() {
+            loadQuestion();
+            startTimer();
+        }
+    </script>
+</body>
+</html>

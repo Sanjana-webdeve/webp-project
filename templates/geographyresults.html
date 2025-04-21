@@ -6,14 +6,15 @@
     <title>Quiz Results</title>
     <style>
         body {
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Arial', sans-serif;
             text-align: center;
-            background: linear-gradient(135deg, #f8b500, #fceabb);
+            background: linear-gradient(135deg, #43cea2, #185a9d);
             margin: 0;
             padding: 20px;
+            min-height: 100vh;
         }
         .container {
-            max-width: 600px;
+            max-width: 800px;
             background: white;
             padding: 30px;
             margin: auto;
@@ -21,35 +22,29 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
         h1 {
-            color: #333;
-            margin-bottom: 20px;
+            color: #2c3e50;
+            margin-bottom: 30px;
+        }
+        .score-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 30px;
         }
         .score-box {
-            background: #4CAF50;
-            color: white;
-            padding: 15px;
+            font-size: 2em;
+            color: #2c3e50;
+            margin: 10px 0;
+        }
+        .percentage {
             font-size: 1.5em;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-        .answer-item {
-            text-align: left;
-            margin: 15px 0;
-            padding: 15px;
-            border-radius: 10px;
-            background: #f8f9fa;
-            border-left: 5px solid;
-        }
-        .correct {
-            border-left-color: #2ecc71;
-        }
-        .incorrect {
-            border-left-color: #e74c3c;
+            color: #43cea2;
+            margin: 10px 0;
         }
         .stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 20px;
             margin: 20px 0;
         }
         .stat-item {
@@ -57,69 +52,106 @@
             border-radius: 10px;
             font-size: 1.2em;
         }
-        .stat-item.correct {
-            background: #e8f5e9;
-            color: #2e7d32;
+        .correct {
+            background: #d4edda;
+            color: #155724;
         }
-        .stat-item.incorrect {
-            background: #ffebee;
-            color: #c62828;
+        .incorrect {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .answers-summary {
+            text-align: left;
+            margin-top: 30px;
+        }
+        .answer-item {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 5px solid;
+        }
+        .answer-item.correct {
+            border-left-color: #28a745;
+        }
+        .answer-item.incorrect {
+            border-left-color: #dc3545;
         }
         .retry-btn {
-            background: #007bff;
+            background: #43cea2;
             color: white;
-            padding: 12px 24px;
-            font-size: 1.2em;
+            padding: 15px 30px;
             border: none;
+            border-radius: 8px;
+            font-size: 1.2em;
             cursor: pointer;
-            border-radius: 5px;
             margin-top: 20px;
             transition: background 0.3s;
         }
         .retry-btn:hover {
-            background: #0056b3;
+            background: #3ab890;
+        }
+        .feedback {
+            margin: 20px 0;
+            font-size: 1.2em;
+            color: #2c3e50;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Quiz Results</h1>
-        <div class="score-box" id="score"></div>
+        
+        <div class="score-container">
+            <div class="score-box" id="score"></div>
+            <div class="percentage" id="percentage"></div>
+        </div>
         
         <div class="stats">
             <div class="stat-item correct" id="correct-count"></div>
             <div class="stat-item incorrect" id="wrong-count"></div>
         </div>
         
-        <div id="summary"></div>
+        <div class="feedback" id="feedback"></div>
         
-       <button onclick="goBack()">Close Review</button>
+        <div class="answers-summary" id="summary"></div>
+        <button onclick="goBack()">Close Review</button>
+        
     </div>
 
     <script>
+        function getFeedback(percentage) {
+            if (percentage >= 90) return "Outstanding! You're an expert! 🏆";
+            if (percentage >= 70) return "Great job! You have solid knowledge! 🌟";
+            if (percentage >= 50) return "Good effort! Keep learning and improving! 📚";
+            return "Keep studying! It can be challenging but rewarding! 💪";
+        }
+
         function retryQuiz() {
             localStorage.clear();
-            window.location.href = 'index.html';
+            window.location.href = "/user_Dashboard";
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            const responses = JSON.parse(localStorage.getItem('userResponses') || '[]');
-            const score = parseInt(localStorage.getItem('quizScore') || '0');
-            
+            const responses = JSON.parse(localStorage.getItem('geoUserResponses') || '[]');
+            const score = parseInt(localStorage.getItem('geoQuizScore') || '0');
             
             const totalQuestions = responses.length;
             const correctAnswers = responses.filter(r => r.isCorrect).length;
             const wrongAnswers = totalQuestions - correctAnswers;
+            const percentage = (score / totalQuestions) * 100;
             
-           
             document.getElementById('score').textContent = 
-                `Final Score: ${score} out of ${totalQuestions}`;
+                `Score: ${score}/${totalQuestions}`;
+            document.getElementById('percentage').textContent = 
+                `${percentage.toFixed(1)}%`;
             document.getElementById('correct-count').textContent = 
                 `✅ Correct: ${correctAnswers}`;
             document.getElementById('wrong-count').textContent = 
                 `❌ Wrong: ${wrongAnswers}`;
+            document.getElementById('feedback').textContent = 
+                getFeedback(percentage);
             
-            // Generate summary
             const summaryContainer = document.getElementById('summary');
             responses.forEach((response, index) => {
                 const div = document.createElement('div');
@@ -136,7 +168,7 @@
     </script>
     <script>
         function goBack() {
-            window.history.go(-3);
+            window.location.href = "/user_Dashboard";
         }
     </script>
 </body>

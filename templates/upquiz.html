@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QM-User Dashboard</title>
+  <style>
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background-image: url("{{ url_for('static', filename='quizimage.png') }}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center;
+        color: white;
+      }
+      
+      .page-title {
+        text-align: center;
+        background-color: rgba(0, 0, 0, 0.7);
+        padding: 20px;
+        font-size: 28px;
+      }
+      
+      .welcome {
+        font-weight: bold;
+        margin-top: 10px;
+        color: black;
+      }
+      
+      .flash-container {
+        margin: 20px;
+      }
+      
+      .flash-message {
+        padding: 10px;
+        background-color: rgba(192, 243, 9, 0.8);
+        color: black;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+      
+      .flash-message span {
+        float: right;
+        cursor: pointer;
+      }
+      
+      .main-container {
+        padding: 40px;
+      }
+      
+      .card {
+        max-width: 900px;
+        margin: auto;
+        background-color: rgba(255, 255, 255, 0.9);
+        color: black;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.3);
+      }
+      
+      .card-header {
+        background-color: black;
+        color: white;
+        padding: 15px;
+        border-radius: 10px 10px 0 0;
+        font-size: 18px;
+      }
+      
+      .table-header {
+        background-color: #f0f0f0;
+        padding: 10px;
+        font-weight: bold;
+        display: flex;
+        justify-content: space-between;
+        border-bottom: 2px solid #ccc;
+        color: black;
+      }
+      
+      .quiz-list {
+        padding: 15px;
+      }
+      
+      .quiz-item {
+        display: flex;
+        justify-content: space-between;
+        background-color: rgba(255, 255, 255, 0.85);
+        padding: 10px 15px;
+        margin-bottom: 10px;
+        border-radius: 10px;
+        color: black;
+      }
+      
+      .btn-info,
+      .btn-danger,
+      .btn-disabled {
+        padding: 5px 10px;
+        border-radius: 20px;
+        font-size: 14px;
+        text-decoration: none;
+        color: white;
+        margin-left: 5px;
+      }
+      
+      .btn-info {
+        background-color: #17a2b8;
+      }
+      
+      .btn-danger {
+        background-color: #dc3545;
+      }
+      
+      .btn-disabled {
+        background-color: #999;
+        cursor: not-allowed;
+      }    
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+        background-color: #6a0dad;
+        padding: 15px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: 'Segoe UI', sans-serif;
+        z-index: 10;
+      }
+    
+      .nav-links {
+        margin-top: 10px;
+      }
+      .nav-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+      }
+      
+      .nav-search {
+        flex: 1 1 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 15px;
+      }
+      .nav-links a,
+  .nav-links button {
+    margin-left: 20px;
+    text-decoration: none;
+    color: white;
+    background: transparent;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .nav-links button:hover,
+  .nav-links a:hover {
+    color: #ffd700;
+  }
+  .search-form {
+    display: flex;
+    width: 60%;
+    max-width: 600px;
+  }
+  
+  .search-form input[type="search"] {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 18px;
+    border-radius: 8px 0 0 8px;
+    border: none;
+    outline: none;
+  }
+  
+  .search-form button {
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 0 8px 8px 0;
+    border: none;
+    background-color: #ffd700;
+    color: #6a0dad;
+    cursor: pointer;
+    font-weight: bold;
+  }
+  
+  .search-form button:hover {
+    background-color: #ffeb3b;
+  }
+  nav {
+    flex-direction: column;
+    align-items: flex-start;
+  } 
+  .logo {
+    color: white;
+    font-size: 26px;
+    font-weight: bold;
+  }
+  </style>
+</head>
+
+<body>
+    <nav class "navbar">
+        <div class="nav-container">
+            <div class="logo">QuizMaster</div>
+            <div class="nav-links">
+                <a href="/user_Dashboard">Home</a>
+                <a href="/about">About Us</a>
+                <button onclick="scrollToContactUs()">Contact Us</button>
+                <a href="/upquiz">Upcoming Quizzes</a>
+                <a href="/viewScores">Scores</a>
+                <a href="/results">Summary</a>
+                <a href="/creators">Creators</a>
+                <a href="{{url_for('logout')}}">Logout</a>            
+            </div>
+            <div class="nav-search">
+            <form action="{{url_for('user_search')}}" method="GET" class="search-form">
+                <input type="search" name="query" id="ad_search" placeholder="Subjects/Scores/Quiz by Date" />
+                <button type="submit">Go</button>
+            </form>
+            </div>
+    <script>
+        function scrollToSection() {
+            document.getElementById('target-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+        </div>
+    </nav>
+  {% with messages = get_flashed_messages(with_categories=True) %}
+  {% if messages %}
+  <div class="flash-container">
+    {% for category, message in messages %}
+    <div class="flash-message">
+      {{ message }}
+      <span onclick="this.parentElement.style.display='none';">&times;</span>
+    </div>
+    {% endfor %}
+    {% if redirect_url %}
+    <script>
+      setTimeout(function () {
+        fetch("{{ url_for('clear_flash_messages') }}", { method: "POST" });
+      }, 1000);
+    </script>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% endwith %}
+
+  <div class="main-container">
+    <div class="card">
+      <div class="card-header">Upcoming Quizzes</div>
+      <div class="table-header">
+        <span>Id</span>
+        <span>No. of Questions</span>
+        <span>Date</span>
+        <span>Duration (mins)</span>
+        <span>Action</span>
+      </div>
+
+      <div class="quiz-list">
+        {% for quiz in quizzes %}
+        <div class="quiz-item">
+          <span><strong>{{quiz.quiz_id}}</strong></span>
+          <span><strong>{{quiz.questions|length}}</strong></span>
+          <span><strong>{{quiz.date_quiz}}</strong></span>
+          <span><strong>{{quiz.time_dur}}</strong></span>
+          <span>
+            <a href="/viewQuiz/{{ quiz.quiz_id }}" class="btn-info">View</a>
+            {% if quiz.date_quiz <= td %}
+            <a href="/startQuiz/{{ quiz.quiz_id }}" class="btn-danger">Start</a>
+            {% else %}
+            <span class="btn-disabled">Start</span>
+            {% endif %}
+          </span>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</body>
+</html>

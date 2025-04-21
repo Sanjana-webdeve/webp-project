@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Geography Quiz</title>
+    <title>GK Quiz</title>
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -15,7 +15,7 @@
         }
         .container {
             max-width: 800px;
-            background: linear-gradient(red,orange,yellow);
+            background: linear-gradient(green,lightgreen,yellow);
             padding: 30px;
             margin: auto;
             border-radius: 15px;
@@ -90,7 +90,7 @@
 <body>
     <div class="container">
         <div id="timer" class="timer">10:00</div>
-        <h1>Geography Quiz</h1>
+        <h1>GK Quiz</h1>
         <div id="quiz"></div>
         <div class="progress" id="progress"></div>
         <div class="progress-bar">
@@ -100,57 +100,60 @@
     
     <script>
         const questions = [
-            {
-                question: "What is the capital of Japan?",
-                options: ["Tokyo", "Seoul", "Beijing", "Bangkok"],
-                correct: "Tokyo"
-            },
-            {
-                question: "Which is the largest ocean in the world?",
-                options: ["Pacific Ocean", "Atlantic Ocean", "Indian Ocean", "Arctic Ocean"],
-                correct: "Pacific Ocean"
-            },
-            {
-                question: "Which country is known as the Land of the Rising Sun?",
-                options: ["Japan", "China", "Thailand", "Vietnam"],
-                correct: "Japan"
-            },
-            {
-                question: "What is the largest desert in the world?",
-                options: ["Sahara Desert", "Antarctic Desert", "Arctic Desert", "Gobi Desert"],
-                correct: "Antarctic Desert"
-            },
-            {
-                question: "Which continent is known as the 'Dark Continent'?",
-                options: ["Africa", "Australia", "South America", "Antarctica"],
-                correct: "Africa"
-            },
-            {
-                question: "What is the longest river in the world?",
-                options: ["Nile", "Amazon", "Mississippi", "Yangtze"],
-                correct: "Nile"
-            },
-            {
-                question: "Which is the smallest country in the world?",
-                options: ["Vatican City", "Monaco", "Nauru", "San Marino"],
-                correct: "Vatican City"
-            },
-            {
-                question: "Which mountain range is the longest in the world?",
-                options: ["Andes", "Himalayas", "Rocky Mountains", "Alps"],
-                correct: "Andes"
-            },
-            {
-                question: "What is the capital of Australia?",
-                options: ["Canberra", "Sydney", "Melbourne", "Perth"],
-                correct: "Canberra"
-            },
-            {
-                question: "Which country has the most islands in the world?",
-                options: ["Sweden", "Norway", "Indonesia", "Japan"],
-                correct: "Sweden"
-            }
-        ];
+    {
+        question: "Which planet is known as the Red Planet?",
+        options: ["Earth", "Venus", "Mars", "Jupiter"],
+        correct: "Mars"
+    },
+    {
+        question: "How many continents are there on Earth?",
+        options: ["5", "6", "7", "8"],
+        correct: "7"
+    },
+    {
+        question: "Which is the largest ocean on Earth?",
+        options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"],
+        correct: "Pacific Ocean"
+    },
+    {
+        question: "Who is the first President of India?",
+        options: ["Dr. Rajendra Prasad", "Jawaharlal Nehru", "Mahatma Gandhi", "APJ Abdul Kalam"],
+        correct: "Dr. Rajendra Prasad"
+    },
+    {
+        question: "Which animal is known as the 'King of the Jungle'?",
+        options: ["Elephant", "Tiger", "Lion", "Leopard"],
+        correct: "Lion"
+    },
+    {
+        question: "How many colors are there in a rainbow?",
+        options: ["5", "6", "7", "8"],
+        correct: "7"
+    },
+    {
+        question: "What is the capital of India?",
+        options: ["Mumbai", "New Delhi", "Chennai", "Kolkata"],
+        correct: "New Delhi"
+    },
+    {
+        question: "Which gas do plants take in for photosynthesis?",
+        options: ["Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"],
+        correct: "Carbon Dioxide"
+    },
+    {
+        question: "Which month has an extra day in a leap year?",
+        options: ["January", "March", "February", "December"],
+        correct: "February"
+    },
+    {
+        question: "What is the national bird of India?",
+        options: ["Parrot", "Peacock", "Eagle", "Sparrow"],
+        correct: "Peacock"
+    }
+];
+
+             
+          
 
         let currentQuestion = 0;
         let score = 0;
@@ -185,7 +188,7 @@
 
         function submitQuiz() {
             clearInterval(timerInterval);
-            // Submit remaining questions as unanswered
+           
             while (currentQuestion < questions.length) {
                 userResponses.push({
                     question: questions[currentQuestion].question,
@@ -197,7 +200,7 @@
             }
             localStorage.setItem('geoQuizScore', score);
             localStorage.setItem('geoUserResponses', JSON.stringify(userResponses));
-            window.location.href = 'geographyresults.html';
+            window.location.href = "/geographyresults";
         }
 
         function loadQuestion() {
@@ -242,7 +245,7 @@
             loadQuestion();
         }
 
-        // Initialize quiz and timer
+        
         window.onload = function() {
             loadQuestion();
             startTimer();
