@@ -74,14 +74,14 @@
         <div class="card shadow-lg mb-4">
             <div class="card-header bg-dark text-white d-flex justify-content-between">
                 <span>
+                  <strong>Tutorial Name: {{t.tut_name}}</strong>&nbsp;&nbsp;
                   <a href="/deleteTut/{{ t.tut_id }}" class="btn btn-sm btn-danger">Delete</a>
                 </span>
             </div>
-            <div class="card-header bg-white text-blue d-flex justify-content-between">
-              <span><strong>Tutorial Id: {{t.tut_id}}</strong></span>
-              <span><strong>Tutorial Name: {{t.tut_name}}</strong></span>
-              <span><strong>Tutorial Link: {{t.tut_link}}</strong></span>
-              <span><strong>Description: {{t.tut_desc}}</strong></span>
+            <div class="card-body bg-white text-dark">
+              <p><strong>Tutorial Id:</strong> {{ t.tut_id }}</p>
+              <p><strong>Tutorial Link:</strong> <a href="{{ t.tut_link }}" target="_blank">{{ t.tut_link }}</a></p>
+              <p><strong>Description:</strong> {{ t.tut_desc }}</p>
             </div>
         </div>
     </div>

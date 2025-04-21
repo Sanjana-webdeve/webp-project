@@ -191,9 +191,9 @@
   <div class="container pt-5">
     {% for tut in t %}
     <div style="background-color: rgba(255,255,255,0.8); padding: 20px; border-radius: 10px; max-width: 300px; text-align: center;">
-      <h3 style="color: #6a0dad;">{{ tut.name }}</h3>
-     <a href="{{ tut.link }}" target="_blank" style="color: #6a0dad; font-weight: bold; text-decoration: underline;">Open Tutorial</a>
-      <p>{{ tut.description }}</p>
+      <h3 style="color: #6a0dad;">{{ tut.tut_name }}</h3>
+     <a href="{{ tut.tut_link }}" target="_blank" style="color: #6a0dad; font-weight: bold; text-decoration: underline;">Open Tutorial</a>
+      <p>{{ tut.tut_desc }}</p>
     </div>
     {% endfor %}
   </div>

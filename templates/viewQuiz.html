@@ -4,83 +4,181 @@
   <title>QM View Quiz</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" 
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" /> 
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right,yellow,orange,red);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+      animation: fadeIn 1s ease-in-out;
+      position: relative;
+      overflow: hidden;
+    }
+
+    h3 {
+      font-size: 2.5em;
+      margin-bottom: 30px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      font-weight: bold;
+      color: black;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      padding: 30px;
+      width: 100%;
+      max-width: 600px;
+      backdrop-filter: blur(10px);
+      animation: slideUp 0.8s ease-out;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #ffe57f;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255, 255, 255, 0.85);
+      color: #333;
+      font-size: 1em;
+    }
+
+    input[readonly] {
+      background-color: #f1f1f1;
+    }
+
+    .btn-secondary {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 12px 24px;
+      background-color: #ff9800;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      background-color: #fb8c00;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .symbol-circle {
+      position:fixed;
+      font-size: 1.8em;
+      color: rgba(27, 135, 182, 0.4);
+      animation: rotate 20s linear infinite;
+    }
+
+    .symbol-circle span {
+      display: inline-block;
+      margin: 0 10px;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .math { top: 5%; left: 10%; }
+    .science { top: 10%; right: 10%; }
+    .social { bottom: 15%; left: 10%; }
+    .english { bottom: 5%; right: 20%; }
+    .sports { top: 50%; left: 40%; }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    
+  </style>
 </head>
-<body class="bg-primary">
-<div class="container pt-5">
-	<h3 class="strong text-center text-white">View Quiz</h3>
-</div>
-<div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <form id="viewQuizForm" action="{{ url_for('view_quiz', quiz_id=quiz.quiz_id) }}" method="POST">
-                            <div class="form-group">
-                                <label for="qID">
-                                    ID
-                                </label>
-                                <input type="number" 
-                                       class="form-control" 
-                                       id="qID" name="qID" value="{{ quiz.quiz_id}}" readonly="readonly"
-                                        required />
-                            </div>
-                            <div class="form-group">
-                                <label for="sub">
-                                    Subject
-                                </label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="sub" name="sub" value="{{quiz.chapter.subject.sub_name}}" readonly="readonly"
-                                        required />
-                            </div>
-                            <div class="form-group">
-                                <label for="chap">
-                                    Chapter
-                                </label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="chap" name="chap" value="{{quiz.chapter.chap_name}}" readonly="readonly"
-                                        required />
-                            </div>
-                            <div class="form-group">
-                                <label for="ques">
-                                    No. of Questions
-                                </label>
-                                <input type="number" 
-                                       class="form-control" 
-                                       id="ques" name="ques" value="{{quiz.questions|length}}" readonly="readonly"
-                                        required />
-                            </div>
-                            <div class="form-group">
-                                <label for="dat">
-                                    Scheduled Date
-                                </label>
-                                <input type="date" 
-                                       class="form-control" 
-                                       id="dat" name="dat" value="{{quiz.date_quiz}}" readonly="readonly"
-                                        required />
-                            </div>
-                            <div class="form-group">
-                                <label for="dur">
-                                    Duration
-                                </label>
-                                <input type="time" step="1"
-                                       class="form-control" 
-                                       id="dur" name="dur" value="{{quiz.time_dur}}" readonly="readonly"
-                                        required />
-                            </div>
-                            {% if not admin%}
-                                <a href="{{ url_for('user_Dashboard')}}" class="btn btn-secondary">Cancel</a>
-                            {%endif%}
-                            </div>
-                        </form>
-                        
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+<body>
+  <div class="symbol-circle math">
+    <span>∑</span><span>π</span><span>√</span><span>∫</span><span>∆</span><span>≈</span><span>%</span><span>*</span>
+  </div>
+  <div class="symbol-circle science">
+    <span>🔬</span><span>🧪</span><span>🔭</span><span>⚛️</span><span>🌡️</span><span>🧬</span>
+  </div>
+  <div class="symbol-circle social">
+    <span>🌍</span><span>🏛️</span><span>📜</span><span>🧭</span><span>⚖️</span><span>🏺</span>
+  </div>
+  <div class="symbol-circle english">
+    <span>📚</span><span>📝</span><span>🔤</span><span>✍️</span><span>📖</span><span>📎</span>
+  </div>
+  <div class="symbol-circle sports">
+    <span>⚽</span><span>🏀</span><span>🏈</span><span>🎾</span><span>🥇</span><span>🏸</span>
+  </div>
+
+  <div class="math-theme">
+    <h3 class="strong text-center">📚 View Quiz</h3>
+  </div>
+  <div class="card">
+    <form id="viewQuizForm" action="{{ url_for('view_quiz', quiz_id=quiz.quiz_id) }}" method="POST">
+      <div class="form-group">
+        <label for="qID">🆔 ID</label>
+        <input type="number" id="qID" name="qID" value="{{ quiz.quiz_id}}" readonly required />
+      </div>
+      <div class="form-group">
+        <label for="sub">📘 Subject</label>
+        <input type="text" id="sub" name="sub" value="{{quiz.chapter.subject.sub_name}}" readonly required />
+      </div>
+      <div class="form-group">
+        <label for="chap">📗 Chapter</label>
+        <input type="text" id="chap" name="chap" value="{{quiz.chapter.chap_name}}" readonly required />
+      </div>
+      <div class="form-group">
+        <label for="ques">❓ No. of Questions</label>
+        <input type="number" id="ques" name="ques" value="{{quiz.questions|length}}" readonly required />
+      </div>
+      <div class="form-group">
+        <label for="dat">📅 Scheduled Date</label>
+        <input type="date" id="dat" name="dat" value="{{quiz.date_quiz}}" readonly required />
+      </div>
+      <div class="form-group">
+        <label for="dur">⏳ Duration</label>
+        <input type="time" step="1" id="dur" name="dur" value="{{quiz.time_dur}}" readonly required />
+      </div>
+      {% if not admin %}
+        <a href="{{ url_for('user_Dashboard')}}" class="btn-secondary">Cancel</a>
+      {% endif %}
+    </form>
+  </div>
 </body>
 </html>
