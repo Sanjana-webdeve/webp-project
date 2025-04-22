@@ -13,16 +13,14 @@
 
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(to right,yellow,orange,red);
+      background: linear-gradient(to right, yellow, orange, red);
       color: #fff;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
       padding: 40px 20px;
       animation: fadeIn 1s ease-in-out;
       position: relative;
-      overflow: hidden;
+      overflow-y: auto; 
+      display: block;    
     }
 
     h3 {
@@ -53,7 +51,7 @@
       display: block;
       font-weight: bold;
       margin-bottom: 8px;
-      color: #ffe57f;
+      color: #342e19;
     }
 
     input {
@@ -176,7 +174,7 @@
         <input type="time" step="1" id="dur" name="dur" value="{{quiz.time_dur}}" readonly required />
       </div>
       {% if not admin %}
-        <a href="{{ url_for('user_Dashboard')}}" class="btn-secondary">Cancel</a>
+        <a href="{{ url_for('upquiz')}}" class="btn-secondary">Cancel</a>
       {% endif %}
     </form>
   </div>

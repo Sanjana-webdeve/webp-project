@@ -2,149 +2,313 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" 
-          content="width=device-width, 
-                   initial-scale=1,
-                   shrink-to-fit=no" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>    
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QM - Admin Quiz Management</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+    }
 
-    <title>QM-Admin Quiz Management</title>
+    body {
+      background: linear-gradient(to right, #4facfe, #00f2fe);
+      color: #333;
+      min-height: 100vh;
+    }
 
-    <script>
-      function loadQuizDetails(quizId) {
-          $.ajax({
-              url: "/viewQuiz/" + quizId,
-              type: "GET",
-              success: function(response) {
-                  $("#modalContent").html(response);  
-                  $("#myModal").modal("show"); 
-              },
-          });
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 30px;
+      background-color: #ffcc00;
+      flex-wrap: wrap;
+    }
+
+    .navbar ul {
+      display: flex;
+      gap: 20px;
+      list-style: none;
+      flex-wrap: wrap;
+    }
+
+    .navbar a {
+      text-decoration: none;
+      color: #000;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+
+    .navbar a:hover {
+      color: #fff;
+    }
+
+    .navbar form {
+      display: flex;
+      gap: 5px;
+    }
+
+    .navbar input[type="search"] {
+      padding: 5px 10px;
+      border-radius: 5px;
+      border: none;
+      outline: none;
+    }
+
+    .navbar button {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 5px 12px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .welcome {
+      color: #333;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 30px 20px;
+    }
+
+    h3 {
+      text-align: center;
+      color: white;
+      margin-bottom: 20px;
+      font-size: 2rem;
+      text-shadow: 2px 2px 4px #00000050;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px 0;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: 0.3s;
+    }
+
+    .card:hover {
+      transform: scale(1.01);
+    }
+
+    .card-header {
+      background: #222;
+      color: white;
+      padding: 10px;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-header h5 a {
+      color: white;
+      text-decoration: none;
+    }
+
+    .card-header h5 a:hover {
+      text-decoration: underline;
+    }
+
+    .btn {
+      padding: 5px 12px;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-info {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-success {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .d-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .border-bottom {
+      border-bottom: 1px solid #ccc;
+    }
+
+    .py-2 {
+      padding: 10px 0;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 999;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      width: 90%;
+    }
+
+    .modal-header,
+    .modal-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .close {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
       }
-    </script>
+
+      .navbar form {
+        margin-top: 10px;
+        width: 100%;
+      }
+
+      .d-flex {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+      }
+    }
+  </style>
 </head>
 
-<body class="bg-primary">
+<body>
 
-   <div class="container pt-3">
-	<h3 class="strong text-center text-white"> Quiz Management</h3>
-  </div>
-  <nav class="navbar navbar-expand-sm bg-warning navbar-dark">
   <div class="container">
-    
-    <ul class="navbar-nav">
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/admin_Dashboard">Home</a></li>
-      <li class="nav-item active px-3 py-0 navbar-text"><a class='nav-link' href="/quiz_Management">Quiz</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/tutorials">Tutorials</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/summary">Summary</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/viewUsers">View Users</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="{{url_for('logout')}}">Logout</a></li>
-    </ul>
-    <form class="navbar-form navbar-left" action="{{url_for('admin_search')}}" method="GET">
-      <div class="input-group">
-        <input type="search" class="form-control" placeholder="Search User/Subject/Quiz" name="query" id="ad_search"/>    
-        <div class="input-group-append">
-          <button class="btn btn-success" type="submit">Go</button>
-       </div>
-      </div>
-    </form>
-    <div class="navbar-header">
-      <span class="strong text-light">Welcome Admin</span>
-    </div>
+    <h3>Quiz Management</h3>
   </div>
-</nav>
-{% with messages = get_flashed_messages(with_categories=True) %}
-    {% if messages %}
-        <div class="container mt-3">
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endfor %}
-            {% if redirect_url %}
-            <script>
-                setTimeout(function() {
-                    fetch("{{ url_for('clear_flash_messages') }}", { method: "POST" });
-                }, 1000); 
-            </script>
-        {% endif %}
-        </div>
-    {% endif %}
-{% endwith %}
-<div class="container pt-5">
-             
-  <div class="row">
+
+  <nav class="navbar">
+    <ul>
+      <li><a href="/admin_Dashboard">Home</a></li>
+      <li><a href="/quiz_Management">Quiz</a></li>
+      <li><a href="/tutorials">Tutorials</a></li>
+      <li><a href="/summary">Summary</a></li>
+      <li><a href="/viewUsers">View Users</a></li>
+      <li><a href="{{url_for('logout')}}">Logout</a></li>
+    </ul>
+    <form action="{{url_for('admin_search')}}" method="GET">
+      <input type="search" placeholder="Search User/Subject/Quiz" name="query" id="ad_search" />
+      <button type="submit">Go</button>
+    </form>
+    <div class="welcome">Welcome Admin</div>
+  </nav>
+
+  <div class="container">
     {% for q in quiz %}
-    <div class="col-md-6">
-        <div class="card shadow-lg mb-4">
-            <div class="card-header bg-dark text-white d-flex justify-content-between">
-                <h5 class="mb-0"><a href="#" data-toggle="modal" data-target="#myModal" onclick="loadQuizDetails('{{ q.quiz_id }}')">{{q.title}}</a></h5>
-                <span>
-                  <a href="/editQuiz/{{ q.quiz_id }}" class="btn btn-sm btn-info">Edit</a>
-                  <a href="/deleteQuiz/{{ q.quiz_id }}" class="btn btn-sm btn-danger">Delete</a>
-                </span>
-            </div>
-            <div class="card-header bg-white text-blue d-flex justify-content-between">
-              <table class="table">
-                <thead>
-                    <tr>
-                        <th>Id</th>
-                        <th>Title</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-            </table>
-          </div>
-            <div class="card-body">
-                {% for ques in q.questions %}
-                <div class="d-flex justify-content-between border-bottom py-2">
-                    <span><strong>{{ ques.q_id }}</strong></span>
-                    <span><strong>{{ques.q_title}}</strong></span>
-                    <span>
-                        <a href="/editQuestion/{{ ques.q_id }}" class="btn btn-sm btn-info">Edit</a>
-                        <a href="/deleteQuestion/{{ ques.q_id }}" class="btn btn-sm btn-danger">Delete</a>
-                    </span>
-                </div>
-                {% endfor %}
-                <form action="{{ url_for('add_question', quiz_id=q.quiz_id) }}" method="POST">
-                  <button type="submit" class="btn btn-sm btn-success">+ Add Question</button>
-              </form>
-            </div>
+    <div class="card">
+      <div class="card-header">
+        <h5><a href="#" onclick="loadQuizDetails('{{ q.quiz_id }}')">{{ q.title }}</a></h5>
+        <span>
+          <a href="/editQuiz/{{ q.quiz_id }}" class="btn btn-info">Edit</a>
+          <a href="/deleteQuiz/{{ q.quiz_id }}" class="btn btn-danger">Delete</a>
+        </span>
+      </div>
+      <div class="card-body">
+        {% for ques in q.questions %}
+        <div class="d-flex border-bottom py-2">
+          <span><strong>{{ ques.q_id }}</strong></span>
+          <span><strong>{{ ques.q_title }}</strong></span>
+          <span>
+            <a href="/editQuestion/{{ ques.q_id }}" class="btn btn-info">Edit</a>
+            <a href="/deleteQuestion/{{ ques.q_id }}" class="btn btn-danger">Delete</a>
+          </span>
         </div>
+        {% endfor %}
+        <form action="{{ url_for('add_question', quiz_id=q.quiz_id) }}" method="POST">
+          <button type="submit" class="btn btn-success">+ Add Question</button>
+        </form>
+      </div>
     </div>
     {% endfor %}
-  </div> 
-</div>
-<div class="container pt-5 text-center">
-  <form id="addQuiz"  action="{{ url_for('add_quiz') }}" >
-     <input type="submit" class="btn btn-primary" value="Add Quiz" />
-  </form>
-</div>
-<div class="modal" id="myModal">
-  <div class="modal-dialog">
-    <div class="modal-content">
+  </div>
 
+  <div class="container text-center">
+    <form id="addQuiz" action="{{ url_for('add_quiz') }}">
+      <input type="submit" class="btn btn-primary" value="Add Quiz" />
+    </form>
+  </div>
+
+  <div class="modal" id="myModal">
+    <div class="modal-content">
       <div class="modal-header">
-        <h4 class="modal-title">Details of Quiz</h4>
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4>Details of Quiz</h4>
+        <button class="close" onclick="closeModal()">&times;</button>
       </div>
       <div class="modal-body" id="modalContent">
-      </div>      
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+    
       </div>
-
+      <div class="modal-footer">
+        <button class="btn btn-danger" onclick="closeModal()">Close</button>
+      </div>
     </div>
   </div>
-</div>
+
+  <script>
+    function loadQuizDetails(quizId) {
+      fetch("/viewQuiz/" + quizId)
+        .then(res => res.text())
+        .then(html => {
+          document.getElementById("modalContent").innerHTML = html;
+          document.getElementById("myModal").style.display = "flex";
+        });
+    }
+
+    function closeModal() {
+      document.getElementById("myModal").style.display = "none";
+    }
+  </script>
+
 </body>
 
 </html>

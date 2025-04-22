@@ -3,83 +3,169 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" 
-          content="width=device-width, 
-                   initial-scale=1,
-                   shrink-to-fit=no" />
-    <link rel="stylesheet" 
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
     <title>QM-User Search</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            min-height: 100vh;
+            padding: 30px 15px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background-color:lime;
+            border-radius: 15px;
+            padding: 25px 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h3 {
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 30px;
+        }
+
+        h5 {
+            color: #4e54c8;
+            margin-top: 20px;
+        }
+
+        .list-group {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .list-group-item {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            background-color: #f9f9f9;
+        }
+
+        .toggle-btn {
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: bold;
+            color: #4e54c8;
+            cursor: pointer;
+            width: 100%;
+            text-align: left;
+            padding: 10px 0;
+        }
+
+        .toggle-btn span {
+            float: right;
+        }
+
+        .collapse {
+            display: none;
+            margin-top: 10px;
+            padding-left: 10px;
+            border-left: 3px solid #4e54c8;
+        }
+
+        .collapse p {
+            margin: 5px 0;
+        }
+
+        .btn-danger {
+            background-color: #ff4b5c;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 20px;
+            display: inline-block;
+        }
+
+        .btn-danger:hover {
+            background-color: #d73748;
+        }
+    </style>
+    <script>
+        function toggleCollapse(id) {
+            const el = document.getElementById(id);
+            const isVisible = el.style.display === "block";
+            el.style.display = isVisible ? "none" : "block";
+
+            const btn = document.querySelector(`[data-target='${id}']`);
+            if (btn) btn.querySelector("span").innerHTML = isVisible ? "&#9660;" : "&#9650;";
+        }
+    </script>
 </head>
-<body class="bg-primary">
-    <div class="container pt-5">
-        <h3 class="text-white text-center">Search Results for "{{ quer }}"</h3>
 
-        <div class="card mt-4">
-            <div class="card-body">
-                {%if sc%}
-                <h5 class ="card title">Scores</h5>
-                <ul class="list-group">
-                    {%for sr in sc%}
-                        <li class="list-group-item">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#sr{{sr.s_id}}">
-                                <strong>{{sr.score}}</strong>
-                                <span>&darr;</span>
-                            </button>
-                            <div id="sr{{sr.s_id}}" class="collapse">
-                                <p><strong>Score Id: </strong>{{sr.s_id}}</p>
-                                <p><strong>Date of Quiz Taken: </strong>{{sr.date_taken}}</p>
-                                <p><strong>Time taken to complete quiz: </strong>{{sr.dur}}</p>
-                                <p><strong>Quiz Id: </strong>{{sr.quiz_id}}</p>
-                            
-                            </div>
-                        </li>
-                        {%endfor%}
-                </ul>
-                {%endif%}
-                {%if sub%}
-                <h5 class="card title">Subject</h5>
-                <ul class="list-group">
-                    {%for s in sub%}
-                        <li class="list-group-item">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#s{{s.sub_id}}">
-                                <strong>{{s.sub_name}}</strong>
-                                <span>&darr;</span>
-                            </button>
-                            <div id="s{{s.sub_id}}" class="collapse">
-                                <p><strong>Subject Id: </strong>{{s.sub_id}}</p>
-                                <p><strong>Description: </strong>{{s.desc}}</p>                                
-                            </div>
-                        </li>
-                        {%endfor%}
-                </ul>
-                {%endif%}
-                {%if quiz%}
-                <h5 class ="card title">Quiz</h5>
-                <ul class="list-group">
-                    {%for q in quiz%}
-                        <li class="list-group-item">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#q{{q.quiz_id}}">
-                                <strong>{{q.title}}</strong>
-                                <span>&darr;</span>
-                            </button>
-                            <div id="q{{q.quiz_id}}" class="collapse">
-                                <p><strong>Quiz Id: </strong>{{q.quiz_id}}</p>
-                                <p><strong>Date : </strong>{{q.date_quiz}}</p>
-                                <p><strong>Duration: </strong>{{q.time_dur}} mins</p>
-                                <p><strong>Remarks: </strong>{{q.remarks}}</p>
-                            </div>
-                        </li>
-                        {%endfor%}
-                </ul>
-                {%endif%}
+<body>
 
-                <a href="/user_Dashboard" class="btn btn-danger">Back to Dashboard</a>
-            </div>
-        </div>
+    <h3>Search Results for "{{ quer }}"</h3>
+    <div class="container">
+
+        {% if sc %}
+        <h5>Scores</h5>
+        <ul class="list-group">
+            {% for sr in sc %}
+            <li class="list-group-item">
+                <button class="toggle-btn" onclick="toggleCollapse('sr{{sr.s_id}}')" data-target="sr{{sr.s_id}}">
+                    {{sr.score}} <span>&#9660;</span>
+                </button>
+                <div class="collapse" id="sr{{sr.s_id}}">
+                    <p><strong>Score ID:</strong> {{sr.s_id}}</p>
+                    <p><strong>Date of Quiz Taken:</strong> {{sr.date_taken}}</p>
+                    <p><strong>Time Taken to Complete Quiz:</strong> {{sr.dur}}</p>
+                    <p><strong>Quiz ID:</strong> {{sr.quiz_id}}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if sub %}
+        <h5>Subject</h5>
+        <ul class="list-group">
+            {% for s in sub %}
+            <li class="list-group-item">
+                <button class="toggle-btn" onclick="toggleCollapse('s{{s.sub_id}}')" data-target="s{{s.sub_id}}">
+                    {{s.sub_name}} <span>&#9660;</span>
+                </button>
+                <div class="collapse" id="s{{s.sub_id}}">
+                    <p><strong>Subject ID:</strong> {{s.sub_id}}</p>
+                    <p><strong>Description:</strong> {{s.desc}}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if quiz %}
+        <h5>Quiz</h5>
+        <ul class="list-group">
+            {% for q in quiz %}
+            <li class="list-group-item">
+                <button class="toggle-btn" onclick="toggleCollapse('q{{q.quiz_id}}')" data-target="q{{q.quiz_id}}">
+                    {{q.title}} <span>&#9660;</span>
+                </button>
+                <div class="collapse" id="q{{q.quiz_id}}">
+                    <p><strong>Quiz ID:</strong> {{q.quiz_id}}</p>
+                    <p><strong>Date:</strong> {{q.date_quiz}}</p>
+                    <p><strong>Duration:</strong> {{q.time_dur}} mins</p>
+                    <p><strong>Remarks:</strong> {{q.remarks}}</p>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        <a href="/user_Dashboard" class="btn-danger">Back to Dashboard</a>
     </div>
-</body>
-</html>
 
+</body>
+
+</html>

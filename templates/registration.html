@@ -1,105 +1,211 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" 
-          content="width=device-width, 
-                   initial-scale=1,
-                   shrink-to-fit=no" />
-    <link rel="stylesheet" 
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0" />
     <title>QM New User Registration Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #4e54c8, #8f94fb);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background-color:lawngreen;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            padding: 30px 40px;
+        }
+
+        h3 {
+            text-align: center;
+            color: #4e54c8;
+            margin-bottom: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #4e54c8;
+            box-shadow: 0 0 5px rgba(78, 84, 200, 0.4);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            background-color: #ff4b5c;
+            color: #fff;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn:hover {
+            background-color: #d73748;
+        }
+
+        .reset-btn {
+            background-color: #6c757d;
+        }
+
+        .reset-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .bottom-text {
+            margin-top: 15px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .bottom-text a {
+            color: #4e54c8;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .alert-success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .alert-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .alert-warning {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .close {
+            float: right;
+            cursor: pointer;
+            font-size: 18px;
+        }
+    </style>
 </head>
 
-<body class="bg-primary">
-    <div class="container pt-5">
-	<h3 class="strong text-center text-white"> Welcome to User Registraion Form</h3></div>
-    {% with messages = get_flashed_messages(with_categories=True) %}
-    {% if messages %}
-        <div class="container mt-3">
+<body>
+
+    <div class="container">
+        <h3>Welcome to User Registration Form</h3>
+
+        {% with messages = get_flashed_messages(with_categories=True) %}
+        {% if messages %}
             {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+                <div class="alert alert-{{ category }}">
+                    <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
                     {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
             {% endfor %}
             {% if redirect_url %}
             <script>
-                setTimeout(function() {
+                setTimeout(function () {
                     fetch("{{ url_for('clear_flash_messages') }}", { method: "POST" });
                 }, 1000);
             </script>
+            {% endif %}
         {% endif %}
-        </div>
-    {% endif %}
-{% endwith %}
+        {% endwith %}
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card">
-                    <div class="card-body">
-                        <form id="registrationForm"  action="{{ url_for('register') }}" method="POST" >
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" 
-                                       class="form-control" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-                                        title="Enter a valid email address (e.g., user.2025@example.com)"
-                                       id="email" name="email"
-                                       placeholder="Email" required/>
-                            </div>
-                            <div class="form-group">
-                                <label for="password">
-                                    Password
-                                </label>
-                                <input type="password" 
-                                       class="form-control" pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%^&*])[A-Za-z0-9!@#\$%^&*]{8,}$"
-                                       title="Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character (!@#$%^&*)" 
-                                       id="password" name="password"
-                                       placeholder="Password"
-                                    required />
-                            </div>
-			    <div class="form-group">
-                                <label for="name">
-                                    Full Name
-                                </label>
-                                <input type="text" 
-                                       class="form-control" pattern="^[A-Za-z]{1,}$"
-                                       title="Name should contain only letters (A-Z, a-z) and be at least 1 character long."
-                                       id="name" name="name" maxlength="9"
-                                       placeholder="Name" required />
-                            </div>
-			    <div class="form-group">
-                                <label for="standard">
-                                    Standard
-                                </label>
-                                <input type="text" 
-                                       class="form-control" 
-                                       id="std" name="std"
-                                       placeholder="Standard" required />
-                            </div>
-                            <div class="form-group">
-                                <label for="dob">D.O.B </label>
-                                <input type="date" id="dob" class="form-control" name="dob" required/>
-                            </div>
-                            <button class="btn btn-danger">
-                                Submit
-                            </button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			    <input type="reset" value="Reset" class="btn btn-danger"/>
-                        </form>
-			<p class="mt-3">
-                            Already have an account?
-                            <a href="{{ url_for('login') }}">Sign In</a>
-                        </p>
-                        
-                    </div>
-                </div>
+        <form id="registrationForm" action="{{ url_for('register') }}" method="POST">
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email"
+                       id="email" name="email"
+                       placeholder="Email"
+                       pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
+                       title="Enter a valid email address (e.g., user.2025@example.com)"
+                       required />
             </div>
-        </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password"
+                       id="password" name="password"
+                       placeholder="Password"
+                       pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%^&*])[A-Za-z0-9!@#\$%^&*]{8,}$"
+                       title="Password must be at least 8 characters long and include uppercase, lowercase, number, and special character"
+                       required />
+            </div>
+
+            <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text"
+                       id="name" name="name"
+                       placeholder="Name"
+                       maxlength="9"
+                       pattern="^[A-Za-z]{1,}$"
+                       title="Name should contain only letters (A-Z, a-z)"
+                       required />
+            </div>
+
+            <div class="form-group">
+                <label for="std">Standard</label>
+                <input type="text"
+                       id="std" name="std"
+                       placeholder="Standard"
+                       required />
+            </div>
+
+            <div class="form-group">
+                <label for="dob">D.O.B</label>
+                <input type="date" id="dob" name="dob" required />
+            </div>
+
+            <button type="submit" class="btn">Submit</button>
+            &nbsp;
+            <input type="reset" value="Reset" class="btn reset-btn" />
+        </form>
+
+        <p class="bottom-text">
+            Already have an account?
+            <a href="{{ url_for('login') }}">Sign In</a>
+        </p>
     </div>
+
 </body>
 
 </html>

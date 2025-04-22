@@ -234,12 +234,21 @@
         .footer-links a:hover {
             text-decoration: underline;
         } 
-        nav {
-          background-color: #6a0dad;
-          flex-direction: column;
-          align-items: flex-start;
-          padding: 15px 30px;
-        }   
+  
+      body {
+          background-image: url("{{ url_for('static', filename='QUIZMASTER (1).png') }}");
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          position: relative;
+      }
+      nav {
+        background-color: #6a0dad;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 15px 30px;
+      }
+           
     </style>
 </head>
 <body>
@@ -280,24 +289,8 @@
         </div>
         <button class="slider-arrow right" onclick="slideQuizzes('right')">→</button>
     </section>
-   
-
-    
-
-
-   
-
-
-
-
 </html>
-
     
-    
-    
-    
-
-
 <script>
     const trendingQuizzes = [
       { icon: "🧮", title: "Arithmetic Quiz",           link: "/mathsstart" },
@@ -430,8 +423,7 @@
            
         </span>
     </section>
-    
-
+  
     <script>
         
         function scrollToContactUs() {

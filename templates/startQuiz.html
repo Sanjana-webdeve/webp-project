@@ -1,83 +1,216 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>QM Start Quiz</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" 
-          href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
-</head>
-<body class="bg-primary">
-<div class="container pt-5">
-	<h3 class="strong text-center text-white">{{quiz.title}}</h3>
-</div>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-      <div class="col-md-8">
-        <div class="card">
-          <div class="card-header d-flex justify-content-between">
-            <span>
-              <strong>QNo. {{ q_index }}/{{ quiz.questions|length }}</strong>
-            </span>
-            <span class="timer text-danger">
-                    Time Left: <span id="timer"></span>
-            </span>
-          </div>
-            <div class="cad-body">
-                <h5 class="card-title">{{questions.q_statement}}</h5>
-                <form id="startQuizForm" action="{{  url_for('start_quizQuestions', quiz_id=quiz.quiz_id, q_index=q_index) }}" method="POST">
-                    <div class="form-check my-2">
-                        <input class="form-check-input" type="radio" name="ans" id="opt1" value="1"/>
-                        <label class="form-check-label" for="opt1">{{questions.opt_1}}</label>
-                    </div>
-                    <div class="form-check my-2">
-                        <input class="form-check-input" type="radio" name="ans" id="opt2" value="2"/>
-                        <label class="form-check-label" for="opt2">{{questions.opt_2}}</label>
-                    </div>
-                    <div class="form-check my-2">
-                        <input class="form-check-input" type="radio" name="ans" id="opt3" value="3"/>
-                        <label class="form-check-label" for="opt3">{{questions.opt_3}}</label>
-                    </div>
-                    <div class="form-check my-2">
-                        <input class="form-check-input" type="radio" name="ans" id="opt4" value="4"/>
-                        <label class="form-check-label" for="opt4">{{questions.opt_4}}</label>
-                    </div>
-                    <div class="mt-4 d-flex justify-content-between">
-                        {% if q_index<quiz.questions|length %}
-                            <button type="submit" class="btn btn-primary" name="action" value="next">Save & Next</button>
-                          {%else%}
-                            <button type="submit" class="btn btn-primary" name="action" value="next" disabled>Save & Next</button>
-                          {%endif%}
-                          <button type="submit" class="btn btn-success" name="action" value="submit">Submit</button> 
-                    </div>
-                </form>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
-            </div>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(red,orange,yellow);
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .title {
+      text-align: center;
+      color: #fff;
+      font-size: 2rem;
+      font-weight: bold;
+      margin-bottom: 40px;
+    }
+
+    .card {
+      background-color:lightcoral;
+      border-radius: 15px;
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+      overflow: hidden;
+    }
+
+    .card-header {
+      background-color: #f7f9fc;
+      padding: 20px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .timer {
+      color: #e74c3c;
+    }
+
+    .card-body {
+      padding: 25px 30px;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .form-check {
+      margin: 10px 0;
+      padding: 12px 18px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      background-color: #f9f9f9;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .form-check:hover {
+      background-color: #eef1f8;
+    }
+
+    .form-check input {
+      margin-right: 10px;
+    }
+
+    .form-check-label {
+      font-size: 1rem;
+      color: #444;
+      cursor: pointer;
+    }
+
+    .btn-group {
+      margin-top: 30px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .btn {
+      padding: 10px 24px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-primary {
+      background-color: #4e54c8;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #3c40a2;
+    }
+
+    .btn-success {
+      background-color: #27ae60;
+      color: white;
+    }
+
+    .btn-success:hover {
+      background-color: #1e8e4d;
+    }
+
+    .btn:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    @media (max-width: 600px) {
+      .card-body {
+        padding: 20px;
+      }
+
+      .btn-group {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="title">{{quiz.title}}</div>
+
+    <div class="card">
+      <div class="card-header">
+        <span>QNo. {{ q_index }}/{{ quiz.questions|length }}</span>
+        <span class="timer">Time Left: <span id="timer"></span></span>
+      </div>
+
+      <div class="card-body">
+        <h5 class="card-title">{{questions.q_statement}}</h5>
+
+        <form id="startQuizForm"
+              action="{{ url_for('start_quizQuestions', quiz_id=quiz.quiz_id, q_index=q_index) }}"
+              method="POST">
+
+          <div class="form-check">
+            <input type="radio" name="ans" id="opt1" value="1" />
+            <label class="form-check-label" for="opt1">{{questions.opt_1}}</label>
           </div>
-        </div>
+          <div class="form-check">
+            <input type="radio" name="ans" id="opt2" value="2" />
+            <label class="form-check-label" for="opt2">{{questions.opt_2}}</label>
+          </div>
+          <div class="form-check">
+            <input type="radio" name="ans" id="opt3" value="3" />
+            <label class="form-check-label" for="opt3">{{questions.opt_3}}</label>
+          </div>
+          <div class="form-check">
+            <input type="radio" name="ans" id="opt4" value="4" />
+            <label class="form-check-label" for="opt4">{{questions.opt_4}}</label>
+          </div>
+
+          <div class="btn-group">
+            {% if q_index < quiz.questions|length %}
+              <button type="submit" class="btn btn-primary" name="action" value="next">Save & Next</button>
+            {% else %}
+              <button type="submit" class="btn btn-primary" name="action" value="next" disabled>Save & Next</button>
+            {% endif %}
+            <button type="submit" class="btn btn-success" name="action" value="submit">Submit</button>
+          </div>
+        </form>
       </div>
     </div>
-</div>
-<script>
-  window.onload=function(){
-  var time=parseInt("{{ t_rem }}");
-  var tele=document.getElementById('timer');
-  function update(){
-    var mins=Math.floor(time/60);
-    var secs=time%60;
-    if(secs<10){
-      secs='0'+secs;
-    }
-    tele.innerHTML=mins+':'+secs;
-    if(time==0){
-      clearInterval(x);
-      document.getElementById('startQuizForm').submit();
-    }
-    time--;
-  }
-  update();
-  var x=setInterval(update,1000);
-};
-</script>
+  </div>
+
+  <script>
+    window.onload = function () {
+      var time = parseInt("{{ t_rem }}");
+      var tele = document.getElementById('timer');
+
+      function update() {
+        var mins = Math.floor(time / 60);
+        var secs = time % 60;
+        if (secs < 10) secs = '0' + secs;
+        tele.textContent = mins + ':' + secs;
+
+        if (time === 0) {
+          clearInterval(x);
+          document.getElementById('startQuizForm').submit();
+        }
+        time--;
+      }
+
+      update();
+      var x = setInterval(update, 1000);
+    };
+  </script>
+
 </body>
 </html>

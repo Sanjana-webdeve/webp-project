@@ -1,105 +1,341 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" 
-          content="width=device-width, 
-                   initial-scale=1,
-                   shrink-to-fit=no" />
-    <link rel="stylesheet" 
-          href=
-"https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" />
-    <title>QM-Admin Dashboard</title>
-</head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>QM-Admin Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
 
-<body class="bg-primary">
-   <div class="container pt-5">
-	<h3 class="strong text-center text-white"> Admin Dashboard</h3>
-  </div>
-  
-  <nav class="navbar navbar-expand-sm bg-warning navbar-dark">
+    body {
+      background: linear-gradient(135deg, #4facfe, #00f2fe);
+      color: #333;
+      min-height: 100vh;
+      animation: fadeInBody 1s ease-in;
+    }
+
+    @keyframes fadeInBody {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    h3 {
+      text-align: center;
+      padding: 2rem 0;
+      font-size: 2rem;
+      font-weight: 600;
+    }
+
+    nav {
+      background-color: rgba(255, 193, 7, 0.9);
+      padding: 1rem 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      animation: fadeIn 1s ease-in;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    nav ul li a {
+      text-decoration: none;
+      color: #000;
+      padding: 6px 14px;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    nav ul li a:hover {
+      background-color: #fff8dc;
+      transform: scale(1.05);
+    }
+
+    .navbar-form {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .navbar-form input {
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: none;
+      outline: none;
+      transition: box-shadow 0.3s ease;
+    }
+
+    .navbar-form input:focus {
+      box-shadow: 0 0 5px rgba(40, 167, 69, 0.8);
+    }
+
+    .navbar-form button {
+      background-color: #28a745;
+      border: none;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.3s ease, transform 0.2s;
+    }
+
+    .navbar-form button:hover {
+      background-color: #218838;
+      transform: scale(1.05);
+    }
+
+    .welcome {
+      font-weight: 500;
+      color: #000;
+      margin-top: 0.5rem;
+    }
+
+    .container {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+    }
+
+    .card {
+      background: #fff;
+      color: #000;
+      border-radius: 12px;
+      padding: 1rem;
+      width: 100%;
+      max-width: 500px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      animation: slideIn 0.6s ease forwards;
+      transform: translateY(20px);
+      opacity: 0;
+      transition: transform 0.3s ease;
+    }
+
+    @keyframes slideIn {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-header {
+      background-color: #343a40;
+      color: white;
+      padding: 1rem;
+      border-radius: 10px 10px 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .card-body {
+      padding: 1rem;
+    }
+
+    .card-body .d-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ccc;
+      padding: 0.6rem 0;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .btn-info {
+      background-color: #17a2b8;
+      color: white;
+    }
+
+    .btn-info:hover {
+      background-color: #138496;
+      transform: scale(1.05);
+    }
+
+    .btn-danger {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background-color: #c82333;
+      transform: scale(1.05);
+    }
+
+    .btn-success {
+      background-color: #28a745;
+      color: white;
+      margin-top: 1rem;
+    }
+
+    .btn-success:hover {
+      background-color: #218838;
+      transform: scale(1.05);
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      color: white;
+      padding: 12px 24px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-top: 2rem;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .text-center {
+      text-align: center;
+    }
+
+    .alert {
+      padding: 1rem;
+      border-radius: 5px;
+      margin-bottom: 1rem;
+    }
+
+    .alert-success {
+      background-color: #d4edda;
+      color: #155724;
+    }
+
+    .alert-danger {
+      background-color: #f8d7da;
+      color: #721c24;
+    }
+
+    .close {
+      float: right;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    @media (max-width: 768px) {
+      nav {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .navbar-form {
+        width: 100%;
+        margin-top: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
   <div class="container">
-    
-    <ul class="navbar-nav">
-      <li class="nav-item active px-3 py-0 navbar-text"><a class='nav-link' href="/admin_Dashboard">Home</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/quiz_Management">Quiz</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/tutorials">Tutorials</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/summary">Summary</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="/viewUsers">View Users</a></li>
-      <li class="nav-item px-3 py-0 navbar-text"><a class='nav-link' href="{{url_for('logout')}}">Logout</a></li>
+    <h3>Admin Dashboard</h3>
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="/admin_Dashboard">Home</a></li>
+      <li><a href="/quiz_Management">Quiz</a></li>
+      <li><a href="/tutorials">Tutorials</a></li>
+      <li><a href="/summary">Summary</a></li>
+      <li><a href="/viewUsers">View Users</a></li>
+      <li><a href="{{url_for('logout')}}">Logout</a></li>
     </ul>
-    <form class="navbar-form navbar-left" action="{{url_for('admin_search')}}" method="GET">
-      <div class="input-group">
-        <input type="search" class="form-control" placeholder="Search User/Subject/Quiz" name="query" id="ad_search"/>    
-        <div class="input-group-append">
-          <button class="btn btn-success" type="submit">Go</button>
-       </div>
-      </div>
+    <form class="navbar-form" action="{{url_for('admin_search')}}" method="GET">
+      <input type="search" placeholder="Search User/Subject/Quiz" name="query" id="ad_search"/>
+      <button type="submit">Go</button>
     </form>
-    <div class="navbar-header">
-      <span class="strong text-light" style="font-size:large">Welcome Admin</span>
+    <span class="welcome">Welcome Admin</span>
+  </nav>
+
+  {% with messages = get_flashed_messages(with_categories=True) %}
+    {% if messages %}
+      <div class="container">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            {{ message }}
+            <span class="close" onclick="this.parentElement.style.display='none';">&times;</span>
+          </div>
+        {% endfor %}
+        {% if redirect_url %}
+        <script>
+          setTimeout(function () {
+            fetch("{{ url_for('clear_flash_messages') }}", { method: "POST" });
+          }, 1000);
+        </script>
+        {% endif %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <div class="container">
+    <div class="row">
+      {% for subject in sub %}
+      <div class="card">
+        <div class="card-header">
+          <h5>{{ subject.sub_name }}</h5>
+          <span>
+            <a href="/editSubject/{{ subject.sub_id }}" class="btn btn-info">Edit</a>
+            <a href="/deleteSubject/{{ subject.sub_id }}" class="btn btn-danger">Delete</a>
+          </span>
+        </div>
+        <div class="card-body">
+          {% for chapter in subject.chapters %}
+          <div class="d-flex">
+            <span><strong>{{ chapter.chap_name }}</strong></span>
+            <span>
+              <a href="/editChapter/{{ chapter.chap_id }}" class="btn btn-info">Edit</a>
+              <a href="/deleteChapter/{{ chapter.chap_id }}" class="btn btn-danger">Delete</a>
+            </span>
+          </div>
+          {% endfor %}
+          <form action="{{ url_for('add_chapter', sub_id=subject.sub_id) }}" method="POST">
+            <button type="submit" class="btn btn-success">+ Add Chapter</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
     </div>
   </div>
-</nav>
-{% with messages = get_flashed_messages(with_categories=True) %}
-    {% if messages %}
-        <div class="container mt-3">
-            {% for category, message in messages %}
-                <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-            {% endfor %}
-            {% if redirect_url %}
-            <script>
-                setTimeout(function() {
-                    fetch("{{ url_for('clear_flash_messages') }}", { method: "POST" });
-                }, 1000); 
-            </script>
-        {% endif %}
-        </div>
-    {% endif %}
-{% endwith %}
-<div class="container pt-5">
-    <div class="row">
-        {% for subject in sub %}
-        <div class="col-md-6">
-            <div class="card shadow-lg mb-4">
-                <div class="card-header bg-dark text-white d-flex justify-content-between">
-                    <h5 class="mb-0">{{ subject.sub_name }}</h5>
-                    <span>
-                        <a href="/editSubject/{{ subject.sub_id }}" class="btn btn-sm btn-info">Edit</a>
-                            <a href="/deleteSubject/{{ subject.sub_id }}" class="btn btn-sm btn-danger">Delete</a>
-                    </span>
-                </div>
-                <div class="card-body">
-                    
-                    {% for chapter in subject.chapters %}
-                    <div class="d-flex justify-content-between border-bottom py-2">
-                        <span><strong>{{ chapter.chap_name }}</strong></span>
-                        <span>
-                            <a href="/editChapter/{{ chapter.chap_id }}" class="btn btn-sm btn-info">Edit</a>
-                            <a href="/deleteChapter/{{ chapter.chap_id }}" class="btn btn-sm btn-danger">Delete</a>
-                        </span>
-                    </div>
-                    {% endfor %}
-                    <form action="{{ url_for('add_chapter', sub_id=subject.sub_id) }}" method="POST">
-                        <button type="submit" class="btn btn-sm btn-success">+ Add Chapter</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-        {% endfor %}
-    </div>           
-</div>
-<div class="container pt-5 text-center">
-    <form id="addSubject"  action="{{ url_for('add_subject') }}" >
-       <input type="submit" class="btn btn-primary" value="Add Subject" />
-    </form>
-</div>
-</body>
 
+  <div class="container text-center">
+    <form id="addSubject" action="{{ url_for('add_subject') }}">
+      <input type="submit" class="btn-primary" value="Add Subject" />
+    </form>
+  </div>
+
+</body>
 </html>
